@@ -1,0 +1,48 @@
+.GridRow {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+.GridColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.LeftSideGridContainer {
+  flex: 0 0 50px;
+}
+
+.BodyGrid {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+}
+
+.evenRow,
+.oddRow {
+  border-bottom: 1px solid #e0e0e0;
+}
+.oddRow {
+  background-color: #fafafa;
+}
+
+.headersnaming-cell {
+  display: flex;
+  z-index: 0;
+}
+.headersnaming-cell {
+  border-bottom: 1px solid #e0e0e0;
+  padding-left: 10px;
+  overflow-x: hidden;
+}
+
+.headersnaming-headercell {
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 0;
+}
+
+.uniformSizeCell {
+  padding: 0.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

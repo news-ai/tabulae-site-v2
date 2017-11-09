@@ -1,0 +1,10 @@
+[ignore]
+.*/node_modules/fbjs/.*
+.*/node_modules/draft-js/.*
+.*/node_modules/radium/.*
+.*/node_modules/npm/.*
+.*/build/manifest.json
+[include]
+[libs]
+[options]
+module.name_mapper='^\(actions\|components\|constants\)\/\(.*\)$' -> '<PROJECT_ROOT>/js/\1/\2'

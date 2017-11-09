@@ -338,11 +338,9 @@ export function createEmptyListObject({name, fieldsmap, tags, client}) {
 }
 
 export function archiveListToggle(listId, order='archived') {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({ type: ARCHIVE_LIST, listId});
-    let listBody = getState().listReducer[listId];
-    listBody.archived = !listBody.archived;
-    return api.patch(`/lists/${listId}`, listBody)
+    return api.get(`/lists/${listId}/archive`)
     .then(response => {
       const res = normalize(response.data, listSchema);
       dispatch({type: 'RESET_LIST_REDUCER_ORDER', order});

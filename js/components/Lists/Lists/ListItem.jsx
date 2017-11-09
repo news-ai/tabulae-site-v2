@@ -61,6 +61,7 @@ const ListItem = ({list, onToggle, iconName, tooltip, router, nameString, person
   const updatedDate = new Date(list.updated);
   const createdDate = new Date(list.created);
   // person.teamid = 0;
+  
   return (
     <ParentContainer className='row vertical-center'>
       <div

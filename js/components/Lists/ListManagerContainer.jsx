@@ -269,10 +269,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     newListOnClick: untitledNum => {
       dispatch(listActions.createEmptyList(untitledNum))
-      .then(response => {
-        console.log(data);
-        browserHistory.push(`/tables/${response.data.id}`)
-      });
+      .then(response => browserHistory.push(`/tables/${response.data.id}`));
     },
     fetchLists: _ => {
       switch (sortType) {

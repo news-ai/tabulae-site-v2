@@ -23,7 +23,7 @@ export const post = (endpoint, body) =>
     credentials: 'include',
     body: JSON.stringify(body),
   })
-  .then(response => response.status === 200 ? response.text() : Promise.reject(response))
+  .then(response => response.status === 200 || response.status === 201 ? response.text() : Promise.reject(response))
   .then(text => JSON.parse(text));
 
 export const postFile = (endpoint, file) =>
@@ -32,7 +32,7 @@ export const postFile = (endpoint, file) =>
     credentials: 'include',
     body: file,
   })
-  .then(response => response.status === 200 ? response.text() : Promise.reject(response.text()))
+  .then(response => response.status === 200 || response.status === 201 ? response.text() : Promise.reject(response.text()))
   .then(text => JSON.parse(text));
 
 export const patch = (endpoint, body) =>

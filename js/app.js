@@ -81,7 +81,13 @@ import '../css/main.css';
 
 const store = configureStore();
 
-window.TABULAE_API_BASE = process.env.NODE_ENV === 'development' ? `https://dev-dot-newsai-1166.appspot.com/api` : `https://tabulae.newsai.org/api`;
+// TODO: add dev server v2 when its up
+window.TABULAE_API_BASE = process.env.NODE_ENV === 'development' ?
+`https://api.newsai.org/api/v1` :
+`https://api.newsai.org/api/v1`;
+window.TABULAE_API_BASE_AUTH = process.env.NODE_ENV === 'development' ?
+`https://api.newsai.org/api/auth/login` :
+`https://api.newsai.org/api/auth/login`;
 window.TABULAE_HOME = process.env.NODE_ENV === 'development' ? `https://tabulae-dev.newsai.co` : `https://tabulae.newsai.co`;
 
 

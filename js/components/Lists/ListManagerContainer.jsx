@@ -199,6 +199,8 @@ class ListManagerContainer extends Component {
           </div>
         </div>
         <div className='large-offset-1 large-10 small-12 columns'>
+        {this.props.lists.length === 0 && !this.props.isReceiving &&
+          <div style={{margin: '40px 20px', color: grey700, fontSize: '0.9em'}} >You have not created any list. Create a new list by clicking "New" on top right.</div>}
         {keys.map(key => {
           const bucket = buckets[key];
           return (
@@ -267,7 +269,10 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     newListOnClick: untitledNum => {
       dispatch(listActions.createEmptyList(untitledNum))
-      .then(response => browserHistory.push(`/tables/${response.data.id}`));
+      .then(response => {
+        console.log(data);
+        browserHistory.push(`/tables/${response.data.id}`)
+      });
     },
     fetchLists: _ => {
       switch (sortType) {

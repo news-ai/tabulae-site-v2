@@ -30,17 +30,14 @@ const Login = ({loginWithGoogleClick, loginClick, registerClick}) => {
 	return (
 		<div style={styles.container}>
 			<div>
-		{/*
-				<div style={{marginBottom: 50}} >
-					<img src='https://storage.googleapis.com/tabulae-email-images/5689413791121408-IONAfFwuOEc0MJaeNbEGAk2oYYZl1YydCEgkoomRozY=-CopyofCopyofFINAL.png' />
-				</div>
-		*/}
+				{/*
 				<div style={styles.defaultBtnContainer} className='vertical-center horizontal-center'>
 					<div>
 						<RaisedButton style={styles.button.style} label='Register' onClick={registerClick} />
 						<RaisedButton style={styles.button.style} label='Login' onClick={loginClick} />
 					</div>
 				</div>
+				*/}
 				<div className='vertical-center horizontal-center'>
 					<RaisedButton
 					backgroundColor='#4885ed'

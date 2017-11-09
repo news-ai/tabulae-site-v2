@@ -61,7 +61,7 @@ export function removeFirstTimeUser() {
 
 export function loginWithGoogle() {
   return dispatch => {
-    const base = `${window.TABULAE_API_BASE}/auth/google?next=${window.location}`;
+    const base = `${window.TABULAE_API_BASE_AUTH}/google-oauth2/?next=${window.location}`;
     dispatch({type: 'LOGIN WITH GOOGLE'});
     window.location.href = base;
   };

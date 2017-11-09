@@ -35,7 +35,8 @@ export function addExtraEmail(email) {
     .then(response => {
       alertify.notify(`Confirmation email has been sent to ${email}`, 'custom', 8, function() {});
       dispatch({type: 'ADD_EXTRA_EMAIL_CONFIRMATION_SENT'});
-      dispatch({type: 'RECEIVE_NOTIFICATION', message: `Confirmation email has been sent to ${email}`});
+      // dispatch({type: 'RECEIVE_NOTIFICATION', message: `Confirmation email has been sent to ${email}`});
+      // console.log(response);
       return dispatch(receiveLogin(response.data));
     })
     .catch(err => console.log(err));

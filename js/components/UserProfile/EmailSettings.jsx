@@ -196,7 +196,7 @@ class EmailSettings extends Component {
             </div>
             <AddExtraEmails className='bodyCssClass' />
           </div>
-        {props.person.sendgridemails !== null && !NoAccess &&
+        {props.person.sendgridemails.length > 0 && !NoAccess &&
           <div className='row vertical-center' style={styles.item}>
             <div className={spanCssClass}>
               <span style={spanStyle}>Connected</span>

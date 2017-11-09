@@ -60,10 +60,10 @@ class UserProfile extends Component {
         tabBarPosition='top'
         >
           <TabPane placeholder={<span>PLACEHOLDER</span>} tab='Basics' key='1'>
-            <BasicSettings/>
+            <BasicSettings />
           </TabPane>
           <TabPane placeholder={<span>PLACEHOLDER</span>} tab='Email Settings' key='2'>
-            <EmailSettings/>
+            <EmailSettings />
           </TabPane>
         {/*
           <TabPane placeholder={<span>PLACEHOLDER</span>} tab='Invite' key='3'>

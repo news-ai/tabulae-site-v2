@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import EmailSignature from './EmailSignature.jsx';
 import ConnectToThirdPartyEmailService from './ConnectToThirdPartyEmailService.jsx';
-import SMTPSettings from './SMTPSettings.jsx';
+// import SMTPSettings from './SMTPSettings.jsx';
 import AddExtraEmails from './AddExtraEmails.jsx';
 import EmailItem from './EmailItem.jsx';
 
@@ -95,15 +95,20 @@ class EmailSettings extends Component {
       <ConnectToThirdPartyEmailService
       serviceName='Gmail'
       title='Connect to Gmail'
-      href='https://tabulae.newsai.org/api/auth/gmail'
+      href='https://api.newsai.org/api/auth/login/gmail-oauth2/'
       />);
     let outlookNode = (
       <ConnectToThirdPartyEmailService
       serviceName='Outlook'
       title='Connect to Outlook'
-      href='https://tabulae.newsai.org/api/auth/outlook'
+      href='https://api.newsai.org/api/auth/login/outlook-oauth2/'
       />);
-    let smtpNode = (<SMTPSettings/>);
+    let smtpNode = (
+      <ConnectToThirdPartyEmailService
+      serviceName='SMTP'
+      title='Connect to SMTP'
+      href='https://api.newsai.org/api/auth/login/nylas-oauth/'
+      />);
     if (person.gmail) {
       // GOOGLE IS ON
       googleNode = (

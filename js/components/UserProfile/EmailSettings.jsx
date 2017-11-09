@@ -141,6 +141,7 @@ class EmailSettings extends Component {
 
     return (
       <div style={{margin: 50}}>
+    {/*
         <Panel className='row' title='Daily Digest Subscription'>
           <div className='vertical-center'>
             <div>
@@ -154,6 +155,7 @@ class EmailSettings extends Component {
             </div>
           </div>
         </Panel>
+    */}
         <Panel title='Integrations'>
           <span className='smalltext'>By default, we use a 3rd-party email service provider Sendgrid to deliver your emails. If you would like for us to deliver your emails through a different service, then you can enable those integrations here.</span>
           <div className='row vertical-center' style={styles.item}>

@@ -15,15 +15,15 @@ import EmailSettings from './EmailSettings.jsx';
 
 import {actions as loginActions} from 'components/Login';
 
-const InviteSteps = props => <div style={{
-  display: 'flex',
-  justifyContent: 'space-around',
-  margin: '20px 0',
-  padding: 30,
-  textAlign: 'center'
-}}>
-  <span style={{color: grey700, fontSize: '1.5em'}} >For every friend invited that becomes a paid user, you get a <span style={{color: pink600}} >free month</span> added to your account</span>
-</div>;
+// const InviteSteps = props => <div style={{
+//   display: 'flex',
+//   justifyContent: 'space-around',
+//   margin: '20px 0',
+//   padding: 30,
+//   textAlign: 'center'
+// }}>
+//   <span style={{color: grey700, fontSize: '1.5em'}} >For every friend invited that becomes a paid user, you get a <span style={{color: pink600}} >free month</span> added to your account</span>
+// </div>;
 
 
 class UserProfile extends Component {
@@ -40,9 +40,9 @@ class UserProfile extends Component {
   }
 
   componentWillMount() {
-    this.props.getInviteCount().then(count => {
-      this.setState({count});
-    });
+    // this.props.getInviteCount().then(count => {
+    //   this.setState({count});
+    // });
   }
 
   render() {
@@ -65,21 +65,18 @@ class UserProfile extends Component {
           <TabPane placeholder={<span>PLACEHOLDER</span>} tab='Email Settings' key='2'>
             <EmailSettings/>
           </TabPane>
+        {/*
           <TabPane placeholder={<span>PLACEHOLDER</span>} tab='Invite' key='3'>
             <div className='row horizontal-center'>
               <div className='large-8 medium-8 small-12 columns' style={{margin: '20px 0'}} >
                 <InviteSteps/>
-                {
-                /*<div className='horizontal-center'>
-                  <span className='smalltext'>{state.count} friends signed up</span>
-                </div>*/
-                }
                 <div className='horizontal-center' style={{margin: '20px 0'}}>
                   <Invite className='vertical-center'/>
                 </div>
               </div>
             </div>
           </TabPane>
+        */}
         </Tabs>
       </div>);
   }
@@ -94,7 +91,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     patchPerson: body => dispatch(loginActions.patchPerson(body)),
-    getInviteCount: _ => dispatch(getInviteCount())
+    // getInviteCount: _ => dispatch(getInviteCount())
   };
 };
 

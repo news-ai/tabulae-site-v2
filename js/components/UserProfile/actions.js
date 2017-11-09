@@ -15,14 +15,14 @@ export function invite(email) {
   };
 }
 
-export function getInviteCount() {
-  return dispatch => {
-    dispatch({type: 'GET_INVITES'});
-    return api.get(`/invites`)
-    .then(response => response.count)
-    .catch(err => console.log(err));
-  };
-}
+// export function getInviteCount() {
+//   return dispatch => {
+//     dispatch({type: 'GET_INVITES'});
+//     return api.get(`/invites`)
+//     .then(response => response.count)
+//     .catch(err => console.log(err));
+//   };
+// }
 
 export function setupSMTP(smtpObj) {
   return dispatch => {

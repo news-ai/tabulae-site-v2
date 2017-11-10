@@ -72,10 +72,9 @@ class EditContactDialog extends Component {
       rssfeedsTextarea: '',
       addPublicationPanelOpen: false,
       tags: !!this.props.contact.tags ? this.props.contact.tags : [],
-      publicationValues: !!this.props.contact.employers ?
-      this.props.contact.employers
+      publicationValues: this.props.contact.employers
       .filter(id => this.props.publicationReducer[id])
-      .map(id => ({label: this.props.publicationReducer[id].name, value: id})) : []
+      .map(id => ({label: this.props.publicationReducer[id].name, value: id}))
     };
     this.onSubmit = this._onSubmit.bind(this);
     this.onChange = this._onChange.bind(this);

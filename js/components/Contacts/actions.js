@@ -94,10 +94,17 @@ export function fetchContact(contactId) {
   };
 }
 
+const stripDatetimes = contact => {
+  delete contact['created'];
+  delete contact['linkedinupdated'];
+  delete contact['updated'];
+  return contact;
+};
+
 export function patchContact(contactId, contactBody) {
   return (dispatch, getState) => {
     dispatch(requestContact());
-    const contact = Object.assign({}, getState().contactReducer[contactId], contactBody);
+    const contact = Object.assign({}, stripDatetimes(getState().contactReducer[contactId]), contactBody);
     return api.patch(`/contacts/${contactId}`, contact)
     .then(response => {
       // const res = normalize(response, {data: contactSchema});
@@ -129,41 +136,44 @@ export function deleteContacts(ids) {
 }
 
 // used to lazy-load a page, keeps track of the last offset
-export function fetchPaginatedContacts(listId) {
-  // const PAGE_LIMIT = 50;
-  return (dispatch, getState) => {
-    if (getState().listReducer[listId].contacts === null) return;
-    const OFFSET = getState().listReducer[listId].offset;
-    if (OFFSET === null) return;
-    dispatch(requestContact());
-    return api.get(`/lists/${listId}/contacts?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
-    .then(response => {
-      dispatch({
-        type: listConstant.SET_OFFSET,
-        offset: response.count === PAGE_LIMIT ? (PAGE_LIMIT + OFFSET) : null,
-        listId
-      });
-      const res = normalize(response, {
-        data: arrayOf(contactSchema),
-        included: arrayOf(publicationSchema)
-      });
-      dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
-      dispatch(receiveContacts(res.entities.contacts, res.result.data));
-    })
-    .catch( message => dispatch(requestContactFail(message)));
-  };
-}
+// export function fetchPaginatedContacts(listId) {
+//   // const PAGE_LIMIT = 50;
+//   return (dispatch, getState) => {
+//     if (getState().listReducer[listId].contacts === null) return;
+//     const OFFSET = getState().listReducer[listId].offset;
+//     if (OFFSET === null) return;
+//     dispatch(requestContact());
+//     return api.get(`/lists/${listId}/contacts?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+//     .then(response => {
+//       dispatch({
+//         type: listConstant.SET_OFFSET,
+//         offset: response.count === PAGE_LIMIT ? (PAGE_LIMIT + OFFSET) : null,
+//         listId
+//       });
+//       const res = normalize(response, {
+//         data: arrayOf(contactSchema),
+//         included: arrayOf(publicationSchema)
+//       });
+//       dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
+//       dispatch(receiveContacts(res.entities.contacts, res.result.data));
+//     })
+//     .catch( message => dispatch(requestContactFail(message)));
+//   };
+// }
 
 // fetch page without concern to where offset was last
 function fetchContactsPage(listId, pageLimit, offset) {
   return dispatch => {
-    return api.get(`/lists/${listId}/contacts?limit=${pageLimit}&offset=${offset}`)
+    return api.getQuery({
+      endpoint: `/lists/${listId}/contacts`,
+      query: {limit: pageLimit, offset: offset}
+    })
     .then(response => {
       const res = normalize(response, {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)
       });
-      if (res.entities.Publications) dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
+      if (res.entities.publications) dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
       return dispatch(receiveContacts(res.entities.contacts, res.result.data));
     })
     .catch(message => dispatch(requestContactFail(message)));
@@ -249,7 +259,10 @@ function fetchSearchListContacts(listId, query) {
   const LIMIT = 50;
   return dispatch => {
     dispatch({type: LIST_CONTACTS_SEARCH_REQUEST, listId, query});
-    return api.get(`/lists/${listId}/contacts?q="${query}"&limit=${LIMIT}&offset=0`)
+    return api.getQuery({
+      endpoint: `/lists/${listId}/contacts`,
+      query: {q: `"${query}"`, limit: LIMIT, offset: 0}
+    })
     .then(response => {
       const total = response.summary.total;
       // need to fetch rest of search results
@@ -322,12 +335,10 @@ export function addContacts(contactList) {
     dispatch({type: ADDING_CONTACT, contactList});
     return api.post(`/contacts`, contactList)
     .then(response => {
-      console.log(response);
       const res = normalize(response, {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)
       });
-      console.log(res);
       dispatch(receiveContacts(res.entities.contacts, res.result.data));
       return response.data;
     })

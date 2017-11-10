@@ -97,7 +97,7 @@ class AddContactHOC extends Component {
       const listBody = {
         listId: list.id,
         name: list.name,
-        contacts: list.contacts === null ? ids : [...list.contacts, ...ids]
+        contacts: list.contacts.length > 0 ? ids : [...list.contacts, ...ids]
       };
       this.props.patchList(listBody);
       this.setState({open: false, contactBody: {}, rssfeedsTextarea: '', publicationValues: []});
@@ -286,7 +286,7 @@ class AddContactHOC extends Component {
               <Label>Notes</Label>
               <TextField style={textfieldStyle} value={state.contactBody.notes || ''} name='notes' onChange={e => this.onChange('notes', e.target.value)}/>
             </div>
-        {props.list && props.list.fieldsmap !== null &&
+        {props.list &&
           props.list.fieldsmap
           .filter(fieldObj => fieldObj.customfield && !fieldObj.readonly)
           .map((fieldObj, i) => fieldObj.customfield && (

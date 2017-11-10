@@ -47,7 +47,7 @@ const _getter = contact => {
 };
 
 const _getPublicationName = (contact, reducer) => {
-  if (contact.employers === null) return '';
+  if (contact.employers.length === 0) return '';
   else {
     const id = contact.employers[0];
     if (reducer[id]) return reducer[id].name;
@@ -71,10 +71,10 @@ class EditContactDialog extends Component {
       customfields: this.props.contact.customfields,
       rssfeedsTextarea: '',
       addPublicationPanelOpen: false,
-      tags: !!this.props.contact.tags ? this.props.contact.tags : [],
+      tags: this.props.contact.tags,
       publicationValues: this.props.contact.employers
-      .filter(id => this.props.publicationReducer[id])
-      .map(id => ({label: this.props.publicationReducer[id].name, value: id}))
+        .filter(id => this.props.publicationReducer[id])
+        .map(id => ({label: this.props.publicationReducer[id].name, value: id}))
     };
     this.onSubmit = this._onSubmit.bind(this);
     this.onChange = this._onChange.bind(this);
@@ -96,11 +96,10 @@ class EditContactDialog extends Component {
         contactBody: _getter(nextProps.contact),
         immutableContactBody,
         customfields: nextProps.contact.customfields,
-        tags: nextProps.contact.tags === null ? [] : nextProps.contact.tags.map((tag, i) => ({id: i, text: tag})),
-        publicationValues: !!nextProps.contact.employers ?
-        nextProps.contact.employers
-        .filter(id => nextProps.publicationReducer[id])
-        .map(id => ({label: nextProps.publicationReducer[id].name, value: id})) : []
+        tags: nextProps.contact.tags.map((tag, i) => ({id: i, text: tag})),
+        publicationValues: nextProps.contact.employers
+          .filter(id => nextProps.publicationReducer[id])
+          .map(id => ({label: nextProps.publicationReducer[id].name, value: id}))
       });
     }
 
@@ -122,16 +121,13 @@ class EditContactDialog extends Component {
 
   _onSubmit() {
     let contactBody = this.state.contactBody;
-    if (this.state.customfields !== null && this.state.customfields.length > 0) {
+    if (this.state.customfields.length > 0) {
       contactBody.customfields = this.state.customfields.filter(field => !this.props.list.fieldsmap.some(fieldObj => fieldObj.readonly && fieldObj.value === field.name));
     }
 
-    const employers = this.state.publicationValues.map(pub => pub.value);
-    contactBody.employers = employers.length > 0 ? employers : null;
+    contactBody.employers = this.state.publicationValues.map(pub => pub.value);
+    contactBody.tags = this.state.tags.map(tag => tag.text);
 
-    const tags = this.state.tags.map(tag => tag.text);
-    // contactBody.listid = this.props.listId;
-    contactBody.tags = tags;
     this.props.patchContact(this.props.contact.id, contactBody)
     .then(_ => this.props.onClose());
   }
@@ -142,7 +138,6 @@ class EditContactDialog extends Component {
 
   _onCustomChange(name, value) {
     let customfields = this.state.customfields;
-    if (customfields === null) customfields = [];
     if (customfields.some(field => field.name === name)) {
       customfields = customfields.map(field => field.name === name ? ({name, value}) : field);
     } else {
@@ -329,14 +324,14 @@ class EditContactDialog extends Component {
             onChange={e => this.onChange('notes', e.target.value)}
             />
           </div>
-      {props.list && props.list.fieldsmap !== null &&
+      {props.list &&
         props.list.fieldsmap
         .filter(fieldObj => fieldObj.customfield && !fieldObj.readonly)
         .map((fieldObj, i) => fieldObj.customfield && (
           <div key={i} className={columnClassname}>
             <Label>{fieldObj.name}</Label>
             <TextField
-            value={state.customfields === null || !state.customfields.some(field => field.name === fieldObj.value) ? '' : find(state.customfields, field => field.name === fieldObj.value).value}
+            value={!state.customfields.some(field => field.name === fieldObj.value) ? '' : find(state.customfields, field => field.name === fieldObj.value).value}
             style={textfieldStyle}
             ref={fieldObj.value}
             name={fieldObj.value}

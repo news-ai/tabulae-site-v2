@@ -76,17 +76,18 @@ export function fetchContact(contactId) {
     dispatch(requestContact());
     return api.get(`/contacts/${contactId}`)
     .then(response => {
-      const listOnly = response.included.filter(item => item.type === 'lists');
-      const pubOnly = response.included.filter(item => item.type === 'publications');
-      response.lists = listOnly;
-      response.publications = pubOnly;
+      // console.log(response);
+      // const listOnly = response.included.filter(item => item.type === 'lists');
+      // const pubOnly = response.included.filter(item => item.type === 'publications');
+      // response.lists = listOnly;
+      // response.publications = pubOnly;
       const res = normalize(response, {
         data: contactSchema,
-        lists: arrayOf(listSchema),
-        publications: arrayOf(publicationSchema)
+        // lists: arrayOf(listSchema),
+        // publications: arrayOf(publicationSchema)
       });
-      dispatch(listActions.receiveLists(res.entities.lists, res.result.lists, 0));
-      dispatch(publicationActions.receivePublications(res.entities.publications, res.result.publications));
+      // if (res.entities.lists) dispatch(listActions.receiveLists(res.entities.lists, res.result.lists, 0));
+      // if (res.entities.Publications) dispatch(publicationActions.receivePublications(res.entities.publications, res.result.publications));
       return dispatch(receiveContacts(res.entities.contacts, [res.result.data]));
     })
     .catch(message => dispatch(requestContactFail(message)));

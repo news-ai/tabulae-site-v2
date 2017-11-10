@@ -109,9 +109,12 @@ export function fetchLeastRecentlyCreatedLists() {
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.leastRecentlyCreated.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=Created`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: 'created'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -125,9 +128,12 @@ export function fetchMostRecentlyCreatedLists() {
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.mostRecentlyCreated.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Created`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-created'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -141,9 +147,12 @@ export function fetchLists() { // fetchMostRecentlyUsedLists
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.lists.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Updated`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-updated'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -157,9 +166,12 @@ export function fetchLeastRecentlyUsedLists() {
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.leastRecentlyUsed.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=Updated`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: 'updated'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -228,7 +240,10 @@ export function fetchTeamLists() {
     const OFFSET = getState().listReducer.team.offset;
     if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists/team?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/lists/teams`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -251,7 +266,10 @@ export function fetchTagLists(tagQuery) {
     if (tagQuery !== getState().listReducer.tagQuery) OFFSET = 0;
     if (OFFSET === null || getState().listReducer.isReceiving) return;
     dispatch(requestLists());
-    return api.get(`/lists?q=tag:${tagQuery}&limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, q: `tag:${tagQuery}`}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -274,7 +292,10 @@ export function fetchArchivedLists() {
     const OFFSET = getState().listReducer.archived.offset;
     if (OFFSET === null || getState().listReducer.isReceiving) return;
     dispatch(requestLists());
-    return api.get(`/lists/archived?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Created`)
+    return api.getQuery({
+      endpoint: `/lists/archived`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-created'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;

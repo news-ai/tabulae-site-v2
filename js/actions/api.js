@@ -3,8 +3,19 @@ import fetch from 'isomorphic-fetch';
 // issue #3: need to add slash to end of every endpoint in API v2 because of Django
 const addSlashToEndpoint = endpoint => endpoint.charAt(endpoint.length-1) === '/' ? endpoint : `${endpoint}/`;
 
-export const get = endpoint =>
-  fetch(`${window.TABULAE_API_BASE}${addSlashToEndpoint(endpoint)}`, {method: 'GET', credentials: 'include'})
+export const get = (endpoint, bypassAddSlash=false) =>
+  fetch(`${window.TABULAE_API_BASE}${bypassAddSlash ? endpoint : addSlashToEndpoint(endpoint)}`, {method: 'GET', credentials: 'include'})
+  .then(response => response.status === 200 ? response.text() : Promise.reject(response))
+  .then(text => JSON.parse(text));
+
+const buildQuery = ({endpoint, query}) => Object.keys(query)
+.reduce(
+  (url, key, i) => `${url}${i > 0 ? '&' : ''}${key}=${query[key]}`,
+  `${addSlashToEndpoint(endpoint)}?`
+  );
+
+export const getQuery = ({endpoint, query}) =>
+  fetch(`${window.TABULAE_API_BASE}${buildQuery({endpoint, query})}`, {method: 'GET', credentials: 'include'})
   .then(response => response.status === 200 ? response.text() : Promise.reject(response))
   .then(text => JSON.parse(text));
 

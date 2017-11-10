@@ -322,10 +322,12 @@ export function addContacts(contactList) {
     dispatch({type: ADDING_CONTACT, contactList});
     return api.post(`/contacts`, contactList)
     .then(response => {
+      console.log(response);
       const res = normalize(response, {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)
       });
+      console.log(res);
       dispatch(receiveContacts(res.entities.contacts, res.result.data));
       return response.data;
     })

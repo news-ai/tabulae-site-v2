@@ -88,8 +88,7 @@ class AddContactHOC extends Component {
 
     if (this.state.tags.length > 0) contactBody.tags = this.state.tags.map(tag => tag.text);
     
-    const employers = this.state.publicationValues.map(pub => pub.value);
-    contactBody.employers = employers.length > 0 ? employers : null;
+    contactBody.employers = this.state.publicationValues.map(pub => pub.value);
 
     this.props.addContacts([contactBody])
     .then(contacts => {

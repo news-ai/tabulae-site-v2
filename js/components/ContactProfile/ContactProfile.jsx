@@ -42,6 +42,7 @@ import 'node_modules/alertifyjs/build/css/alertify.min.css';
 const Placeholder = props => <div style={{height: 700}}><span>Placeholder</span></div>;
 const None = _ => <span className='text' style={{marginLeft: 10, color: grey700}} >None Added</span>;
 
+
 class ContactProfile extends Component {
   constructor(props) {
     super(props);

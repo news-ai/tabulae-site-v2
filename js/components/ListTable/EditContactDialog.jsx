@@ -131,7 +131,7 @@ class EditContactDialog extends Component {
     contactBody.employers = employers.length > 0 ? employers : null;
 
     const tags = this.state.tags.map(tag => tag.text);
-    contactBody.listid = this.props.listId;
+    // contactBody.listid = this.props.listId;
     contactBody.tags = tags;
     this.props.patchContact(this.props.contact.id, contactBody)
     .then(_ => this.props.onClose());

@@ -84,7 +84,7 @@ class AddContactHOC extends Component {
       }
     });
     if (customRow.length > 0) contactBody.customfields = customRow;
-    contactBody.listid = list.id;
+    // contactBody.listid = list.id;
 
     if (this.state.tags.length > 0) contactBody.tags = this.state.tags.map(tag => tag.text);
     

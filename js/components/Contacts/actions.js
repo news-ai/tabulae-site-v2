@@ -162,7 +162,7 @@ function fetchContactsPage(listId, pageLimit, offset) {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)
       });
-      dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
+      if (res.entities.Publications) dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
       return dispatch(receiveContacts(res.entities.contacts, res.result.data));
     })
     .catch(message => dispatch(requestContactFail(message)));
@@ -216,20 +216,12 @@ export function fetchManyContacts(listId, amount) {
           // poll how many received
           const contactReducer = getState().contactReducer;
           const count = contacts.filter(id => contactReducer[id]).length;
-          // console.log('offset', offset);
-          // console.log('amount', amount);;
-          // console.log('length', contacts.length);
           if (offset + amount >= contacts.length && count === contacts.length) {
-            // console.log('why');
             dispatch({type: contactConstant.MANUALLY_SET_ISRECEIVING_OFF});
             return dispatch({type: listConstant.SET_OFFSET, listId, offset: null});
           } else if (count === offset + amount) {
-            // console.log('ok');
             dispatch({type: contactConstant.MANUALLY_SET_ISRECEIVING_OFF});
             return dispatch({type: listConstant.SET_OFFSET, listId, offset: offset + amount});
-          // } else {
-          //   console.log('huh');
-          //   return dispatch({type: contactConstant.MANUALLY_SET_ISRECEIVING_ON});
           }
         })
         );
@@ -295,7 +287,6 @@ export function searchListContacts(listId, query) {
       const publicationReducer = getState().publicationReducer;
       const contactsWithEmployers = stripOutEmployers(publicationReducer, contacts, ids);
       dispatch({type: LIST_CONTACTS_SEARCH_RECEIVED, ids, contactsWithEmployers, listId});
-      // dispatch(receiveContacts(res.entities.contacts, res.result.data));
       return {searchContactMap: contactsWithEmployers, ids};
     });
   };

@@ -185,9 +185,12 @@ export function fetchAlphabeticalLists() {
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.alphabetical.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=Name`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: 'name'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
@@ -201,9 +204,12 @@ export function fetchAntiAlphabeticalLists() {
   const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
     const OFFSET = getState().listReducer.antiAlphabetical.offset;
-    if (OFFSET === null || getState().listReducer.isReceiving) return;
+    if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
-    return api.get(`/lists?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Name`)
+    return api.getQuery({
+      endpoint: `/lists`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-name'}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;

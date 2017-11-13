@@ -88,17 +88,11 @@ export function bulkSendStagingEmails(emails) {
     const promises = chunkPostPromises(emails, sendStagingPostRequest, 70);
     return Promise.all(promises)
     .then(responses => {
-      console.log(responses);
       // flatten responses into one response
-      // TODO: SUBJECT TO CHANGE, reduce is new, map is old
-      // let data = [];
-      // responses.map(response => response.data.map(email => data.push(email)));
-      const data = responses[0].reduce((acc, response) => [...acc, response.data], []);
-
+      let data = [];
+      responses.map(response => response.data.map(email => data.push(email)));
       const response = {data};
-      console.log(response);
       const res = normalize(response, {data: arrayOf(emailSchema)});
-      console.log(res);
       return dispatch({
         type: RECEIVE_STAGED_EMAILS,
         emails: res.entities.emails,
@@ -260,7 +254,10 @@ export function fetchSentEmails() {
     const OFFSET = getState().stagingReducer.offset;
     if (OFFSET === null || getState().stagingReducer.isReceiving) return;
     dispatch({type: REQUEST_MULTIPLE_EMAILS});
-    return api.get(`/emails/sent?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Created`)
+    return api.getQuery({
+      endpoint: '/emails/sent',
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-created'}
+    })
     .then(response => {
       const contactOnly = response.included.filter(item => item.type === 'contacts');
       response.contacts = contactOnly;
@@ -286,7 +283,10 @@ export function fetchLimitedSentEmails({offset, limit, accumulator, threshold}) 
   console.log('fetch limited');
   return dispatch => {
     dispatch({type: REQUEST_MULTIPLE_EMAILS});
-    return api.get(`/emails/sent?limit=${limit}&offset=${offset}&order=-Created`)
+    return api.getQuery({
+      endpoint: '/emails/sent',
+      query: {limit, offset, order: '-created'}
+    })
     .then(
       response => {
         const contactOnly = response.included.filter(item => item.type === 'contacts');
@@ -350,7 +350,10 @@ export function fetchArchivedEmails() {
     if (OFFSET === null || getState().stagingReducer.isReceiving) return;
     dispatch({type: 'FETCH_ARCHIVED_EMAILS'});
     dispatch({type: REQUEST_MULTIPLE_EMAILS});
-    return api.get(`/emails/archived?limit=${PAGE_LIMIT}&offset=${OFFSET}&order=-Created`)
+    return api.getQuery({
+      endpoint: '/emails/archived',
+      query: {limit: PAGE_LIMIT, offset: OFFSET, order: '-created'}
+    })
     .then(response => {
       const contactOnly = response.included.filter(item => item.type === 'contacts');
       response.contacts = contactOnly;
@@ -378,7 +381,10 @@ export function fetchScheduledEmails() {
     const OFFSET = getState().stagingReducer.scheduledOffset;
     if (OFFSET === null || getState().stagingReducer.isReceiving) return;
     dispatch({type: REQUEST_MULTIPLE_EMAILS});
-    return api.get(`/emails/scheduled?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: '/emails/scheduled',
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const contactOnly = response.included.filter(item => item.type === 'contacts');
       response.contacts = contactOnly;
@@ -409,7 +415,10 @@ export function fetchListEmails(listId) {
     if (OFFSET === null || isReceiving) return;
     if (!OFFSET) OFFSET = 0;
     dispatch({type: REQUEST_MULTIPLE_EMAILS, listId});
-    return api.get(`/lists/${listId}/emails?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/lists/${listId}/emails`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(emailSchema)});
       return dispatch({
@@ -432,7 +441,10 @@ export function fetchSearchSentEmails(queryString) {
     if (OFFSET === null || isReceiving) return;
     if (!OFFSET) OFFSET = 0;
     dispatch({type: REQUEST_MULTIPLE_EMAILS, query: queryString});
-    return api.get(`/emails/search?q="${queryString}"`)
+    return api.getQuery({
+      endpoint: '/emails/search',
+      query: {q: `"${queryString}"`}
+    })
     .then(response => {
       const contactOnly = response.included.filter(item => item.type === 'contacts');
       response.contacts = contactOnly;
@@ -460,7 +472,10 @@ export function fetchContactEmails(contactId) {
     if (OFFSET === null || isReceiving) return Promise.resolve();
     if (!OFFSET) OFFSET = 0;
     dispatch({type: REQUEST_MULTIPLE_EMAILS}, contactId);
-    return api.get(`/contacts/${contactId}/emails?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/contacts/${contactId}/emails`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(emailSchema)});
       return dispatch({
@@ -479,7 +494,10 @@ export function fetchLimitedSpecificDayEmails(day, offset, limit, accumulator, t
   // day format: YYYY-MM-DD
   return dispatch => {
     dispatch({type: 'REQUEST_LIMITED_SPECIFIC_DAY_SENT_EMAILS', day, offset, limit});
-    return api.get(`/emails/search?q=date:${day}&limit=${limit}&offset=${offset}`)
+    return api.getQuery({
+      endpoint: '/emails/search',
+      query: {q: `date:${day}`, limit, offset}
+    })
     .then(
       response => {
         const contactOnly = response.included.filter(item => item.type === 'contacts');
@@ -559,7 +577,7 @@ function createQueryUrl(query) {
   const queryString = keys
   .filter(key => query[key])
   .map(key => `${key}:${query[key]}`).join(',');
-  return `/emails/search?q="${queryString}"`;
+  return `/emails/search/?q="${queryString}"`;
 }
 
 export function fetchLimitedQueryEmails(query, offset, limit, accumulator, threshold) {
@@ -587,10 +605,6 @@ export function fetchLimitedQueryEmails(query, offset, limit, accumulator, thres
           return dispatch(fetchLimitedQueryEmails(query, offset + limit, limit, newAccumulator, threshold));
         } else {
           const hitThreshold = offset + limit >= threshold;
-          // console.log(hitThreshold);
-          // console.log(offset);
-          // console.log(limit);
-          // console.log(threshold);
           dispatch({type: 'STAGING_MANUALLY_SET_ISRECEIVING_OFF'});
           return Promise.resolve({data: newAccumulator, hitThreshold: offset + limit >= threshold || response.data.length === 0, total: response.summary.total});
         }

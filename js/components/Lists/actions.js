@@ -277,6 +277,7 @@ export function fetchTagLists(tagQuery) {
       query: {limit: PAGE_LIMIT, offset: OFFSET, 'tags__name': tagQuery}
     })
     .then(response => {
+      // TODO: update offset base on summary
       const res = normalize(response, {data: arrayOf(listSchema)});
       const newOffset = response.data.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT;
       return dispatch({

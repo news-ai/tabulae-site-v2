@@ -342,7 +342,7 @@ class EmailPanel extends Component {
           subject: subjectObj.html,
           body: bodyObj.html,
           contactid: contact.id,
-          templateid: this.state.currentTemplateId,
+          templateid: this.state.currentTemplateId > 0 ? this.state.currentTemplateId : null,
           cc: this.props.cc.map(item => item.text),
           bcc: this.props.bcc.map(item => item.text),
           fromemail: this.props.from,

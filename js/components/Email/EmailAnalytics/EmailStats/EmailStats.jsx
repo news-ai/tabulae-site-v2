@@ -24,7 +24,7 @@ const dateFormat = (time) => {
 
 const areaChartMargins = {top: 10, right: 30, left: 0, bottom: 0};
 
-const emptyDivStyle = {margin: '20px 0'};
+const emptyDivStyle = {margin: '40px 0'};
 
 class EmailStats extends Component {
   constructor(props) {

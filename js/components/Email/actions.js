@@ -630,7 +630,7 @@ export function fetchFilterQueryEmails(query) {
     .then(
       ({data, hitThreshold, total}) => {
         // console.log(data);
-        const ids = received.length > 0 ? [...received, ...data] : data;
+        const ids = [...received, ...data];
         dispatch({type: RECEIVE_QUERY_EMAILS, ids, query, hitThreshold, total});
         return Promise.resolve(ids.map(id => getState().stagingReducer[id]));
       },

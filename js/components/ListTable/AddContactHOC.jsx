@@ -94,12 +94,7 @@ class AddContactHOC extends Component {
     .then(contacts => {
       const ids = contacts.map(contact => contact.id);
       ids.map(id => this.handleRSSTextarea(id));
-      const listBody = {
-        listId: list.id,
-        name: list.name,
-        contacts: [...list.contacts, ...ids]
-      };
-      this.props.patchList(listBody);
+      this.props.fetchList();
       this.setState({open: false, contactBody: {}, rssfeedsTextarea: '', publicationValues: []});
     });
   }
@@ -375,6 +370,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     addContacts: contacts => dispatch(contactActions.addContacts(contacts)),
+    fetchList: () => dispatch(listActions.fetchList(props.listId)),
     patchList: listBody => dispatch(listActions.patchList(listBody)),
     searchPublications: query => dispatch(publicationActions.searchPublications(query)),
     createPublicationThenPatchContact: (contactId, pubName, which) => dispatch(publicationActions.createPublicationThenPatchContact(contactId, pubName, which)),

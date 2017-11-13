@@ -114,6 +114,7 @@ export function patchContact(contactId, contactBody) {
   };
 }
 
+// TODO: REMOVE ALL DELETE CONTACT STUFF DEPRECIATED
 export function deleteContact(contactId) {
   return dispatch => {
     dispatch({type: 'DELETE_CONTACT', contactId});
@@ -135,31 +136,15 @@ export function deleteContacts(ids) {
   };
 }
 
-// used to lazy-load a page, keeps track of the last offset
-// export function fetchPaginatedContacts(listId) {
-//   // const PAGE_LIMIT = 50;
-//   return (dispatch, getState) => {
-//     if (getState().listReducer[listId].contacts === null) return;
-//     const OFFSET = getState().listReducer[listId].offset;
-//     if (OFFSET === null) return;
-//     dispatch(requestContact());
-//     return api.get(`/lists/${listId}/contacts?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
-//     .then(response => {
-//       dispatch({
-//         type: listConstant.SET_OFFSET,
-//         offset: response.count === PAGE_LIMIT ? (PAGE_LIMIT + OFFSET) : null,
-//         listId
-//       });
-//       const res = normalize(response, {
-//         data: arrayOf(contactSchema),
-//         included: arrayOf(publicationSchema)
-//       });
-//       dispatch(publicationActions.receivePublications(res.entities.publications, res.result.included));
-//       dispatch(receiveContacts(res.entities.contacts, res.result.data));
-//     })
-//     .catch( message => dispatch(requestContactFail(message)));
-//   };
-// }
+// TODO: new method
+export function deleteContactFromLists(contactId, listids) {
+  return dispatch => {
+    dispatch({type: 'DELETE_CONTACT_FROM_LISTS', contactId, lists});
+    return api.post(`/contacts/${contactId}`, {listids})
+    .then(response => dispatch({type: 'DELETED_CONTACT', contactId}))
+    .catch(err => console.log(err));
+  }
+}
 
 // fetch page without concern to where offset was last
 function fetchContactsPage(listId, pageLimit, offset) {
@@ -335,6 +320,7 @@ export function addContacts(contactList) {
     dispatch({type: ADDING_CONTACT, contactList});
     return api.post(`/contacts`, contactList)
     .then(response => {
+      console.log(response);
       const res = normalize(response, {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)

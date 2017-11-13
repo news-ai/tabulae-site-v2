@@ -71,7 +71,7 @@ class EmailStatsContainer extends Component {
       <div style={marginTop}>
       {props.didInvalidate &&
         <div>An error occurred. Email stats cannot be fetched at this time.</div>}
-        <EmailStats onDateSelected={this.onChartClick}/>
+        <EmailStats onDateSelected={this.onChartClick} />
       </div>
       <div style={emailContainerStyle}>
         <span style={emailContainerLabelStyle}>{state.selectedDay}</span>

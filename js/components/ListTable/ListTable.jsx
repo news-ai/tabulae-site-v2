@@ -665,12 +665,14 @@ class ListTable extends Component {
 
         // backend requires deleteContacts first before patchList to prevent race condition
         this.setState({isDeleting: true, currentPage});
+
+        // TODO: SHOULDNT ALLOW DELETE NOW, use /contacts/<id>/delete-from-list endpoint
         this.props.deleteContacts(selected)
-        .then(_ => this.props.patchList({
-          listId: this.props.listId,
-          contacts: newListContacts,
-          name: this.props.listData.name,
-        }))
+        // .then(_ => this.props.patchList({
+        //   listId: this.props.listId,
+        //   contacts: newListContacts,
+        //   name: this.props.listData.name,
+        // }))
         .then(_ => {
           // clean up contacts after list to prevent list rendering undefined contacts
           this.setState({isDeleting: false, scrollToRow: minListPosition === 0 ? 0 : minListPosition - 1});

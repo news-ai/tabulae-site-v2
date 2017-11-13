@@ -61,7 +61,10 @@ export function searchPublications(query) {
     // maybe do some timeout
     dispatch({type: 'SEARCH_PUBLICATION_REQUEST', query});
     dispatch(requestPublication());
-    return api.get(`/publications?q="${query}"`)
+    return api.getQuery({
+      endpoint: `/publications`,
+      query: {q: `"${query}"`}
+    })
       .then( response => {
         const res = normalize(response, {
           data: arrayOf(publicationSchema)
@@ -79,7 +82,10 @@ export function searchPublicationsByIdName(query) {
     // implement search for match in cache first then after some time make the search call
     // maybe do some timeout
     dispatch({type: 'SEARCH_PUBLICATION_REQUEST', query});
-    return api.get(`/publications?q="${query}"`)
+    return api.getQuery({
+      endpoint: `/publications`,
+      query: {q: `"${query}"`}
+    })
       .then( response => {
         const res = normalize(response, {
           data: arrayOf(publicationSchema)

@@ -306,13 +306,13 @@ export function searchListContacts(listId, query) {
   };
 }
 
-export function updateContact(id) {
-  return dispatch => {
-    return api.get(`/contacts/${id}/update`)
-    .then(response => dispatch(receiveContact(response.data)))
-    .catch(message => dispatch(requestContactFail(message)));
-  };
-}
+// export function updateContact(id) {
+//   return dispatch => {
+//     return api.get(`/contacts/${id}/update`)
+//     .then(response => dispatch(receiveContact(response.data)))
+//     .catch(message => dispatch(requestContactFail(message)));
+//   };
+// }
 
 export function patchContacts(contactList) {
   return dispatch => {

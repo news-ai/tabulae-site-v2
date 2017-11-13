@@ -74,9 +74,9 @@ const mergeProps = ({list, ...stateProps}, {patchList}, {children}) => {
     ...stateProps,
     onAddTag: name => patchList({
       listId: list.id,
-      name: list.name,
-      tags: list.tags === null ? [name] : [...list.tags, name],
-      client: list.client
+      // name: list.name,
+      tags: [...list.tags, name],
+      // client: list.client
     }),
     onAddClient: client => patchList({
       listId: list.id,

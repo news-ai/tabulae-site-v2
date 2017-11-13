@@ -274,7 +274,7 @@ export function fetchTagLists(tagQuery) {
     dispatch(requestLists());
     return api.getQuery({
       endpoint: `/lists`,
-      query: {limit: PAGE_LIMIT, offset: OFFSET, q: `tag:${tagQuery}`}
+      query: {limit: PAGE_LIMIT, offset: OFFSET, 'tags__name': tagQuery}
     })
     .then(response => {
       const res = normalize(response, {data: arrayOf(listSchema)});

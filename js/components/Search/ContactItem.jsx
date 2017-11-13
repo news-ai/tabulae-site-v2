@@ -65,7 +65,7 @@ const mapStateToProps = (state, props) => {
   const listReducer = state.listReducer;
   return {
     list: listReducer[props.listid],
-    publications: props.employers !== null && props.employers.map(pubid => state.publicationReducer[pubid])
+    publications: props.employers.map(pubid => state.publicationReducer[pubid])
   };
 };
 

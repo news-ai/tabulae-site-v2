@@ -12,11 +12,7 @@ class ContactItemContainer extends Component {
 
   componentWillMount() {
     if (!this.props.list) this.props.fetchList();
-    if (this.props.employers !== null) {
-      this.props.employers.map(eId => {
-        this.props.fetchPublication(eId);
-      });
-    }
+    this.props.employers.map(eId => this.props.fetchPublication(eId));
   }
 
   render() {
@@ -27,13 +23,13 @@ class ContactItemContainer extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const isFetchingPublications = props.employers !== null ? props.employers.some(pubId => !state.publicationReducer[pubId] && !get(state, `isFetchingReducer.publications[${pubId}].isReceiving`, false)) : false;
+  const isFetchingPublications = props.employers.some(pubId => !state.publicationReducer[pubId] && !get(state, `isFetchingReducer.publications[${pubId}].isReceiving`, false));
   return {
-    publications: props.employers !== null ? props.employers
+    publications: props.employers
     .reduce((acc, eId) => {
       if (state.publicationReducer[eId]) acc.push(state.publicationReducer[eId]);
       return acc;
-    }, []) : [],
+    }, []),
     listname: state.listReducer[props.listid] ? state.listReducer[props.listid].name : undefined,
     isFetchingList: get(state, `isFetchingReducer.lists[${props.listid}].isReceiving`, false),
     list: state.listReducer[props.listid],

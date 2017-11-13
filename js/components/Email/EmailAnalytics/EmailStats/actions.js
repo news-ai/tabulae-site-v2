@@ -9,7 +9,10 @@ export function fetchEmailStats(limit = 7) {
     const OFFSET = getState().emailStatsReducer.offset;
     if (OFFSET === null || getState().emailStatsReducer.isReceiving) return;
     dispatch({type: emailStatsConstant.REQUEST, limit: PAGE_LIMIT});
-    return api.get(`/emails/stats?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: '/emails/stats',
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(
       response => {
         const res = normalize(response, {data: arrayOf(emailStatsSchema)});

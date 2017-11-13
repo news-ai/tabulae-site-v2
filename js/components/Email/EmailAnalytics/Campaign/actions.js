@@ -9,7 +9,10 @@ export function fetchCampaignStats(limit = 20) {
     const OFFSET = getState().campaignStatsReducer.offset;
     if (OFFSET === null || getState().campaignStatsReducer.isReceiving) return;
     dispatch({type: campaignStatsConstant.REQUEST, limit: PAGE_LIMIT});
-    return api.get(`/emails/campaigns?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: '/emails/campaigns',
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(
       response => {
         // make uniqueId for normalized reducer

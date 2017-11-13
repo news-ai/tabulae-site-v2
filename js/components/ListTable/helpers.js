@@ -154,21 +154,33 @@ function instagramCommentsToPosts(listData) {
 export function reformatFieldsmap(fieldsmap) {
   const formattedMap = fieldsmap
   .filter(fieldObj => !fieldObj.tableOnly)
-  .map(fieldObj => {
-    switch (fieldObj.value) {
+  .map(({createdby, customfield, description, hidden, id, internal, name, readonly, type, value}) => {
+    switch (value) {
       case 'publication_name_1':
         return {
           name: 'Employers',
           value: 'employers',
-          hidden: fieldObj.hidden,
-          customfield: fieldObj.customfield
+          createdby,
+          customfield,
+          description,
+          hidden,
+          id,
+          internal,
+          readonly,
+          type,
         };
       default:
         return {
-          name: fieldObj.name,
-          value: fieldObj.value,
-          hidden: fieldObj.hidden,
-          customfield: fieldObj.customfield
+          createdby,
+          customfield,
+          description,
+          hidden,
+          id,
+          internal,
+          name,
+          readonly,
+          type,
+          value,
         };
     }
   });

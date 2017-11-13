@@ -88,11 +88,17 @@ export function bulkSendStagingEmails(emails) {
     const promises = chunkPostPromises(emails, sendStagingPostRequest, 70);
     return Promise.all(promises)
     .then(responses => {
+      console.log(responses);
       // flatten responses into one response
-      let data = [];
-      responses.map(response => response.data.map(email => data.push(email)));
+      // TODO: SUBJECT TO CHANGE, reduce is new, map is old
+      // let data = [];
+      // responses.map(response => response.data.map(email => data.push(email)));
+      const data = responses[0].reduce((acc, response) => [...acc, response.data], []);
+
       const response = {data};
+      console.log(response);
       const res = normalize(response, {data: arrayOf(emailSchema)});
+      console.log(res);
       return dispatch({
         type: RECEIVE_STAGED_EMAILS,
         emails: res.entities.emails,
@@ -101,7 +107,8 @@ export function bulkSendStagingEmails(emails) {
       });
     })
     .catch(err => {
-      dispatch({type: STAGING_EMAILS_FAIL, message: err.message});
+      console.log(err);
+      return dispatch({type: STAGING_EMAILS_FAIL, message: err.message});
     });
   };
 }

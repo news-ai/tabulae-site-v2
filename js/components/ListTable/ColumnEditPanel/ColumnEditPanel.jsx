@@ -36,15 +36,12 @@ class ColumnEditPanel extends Component {
   }
 
   onSubmit() {
-    console.log([...this.state.showList, ...this.state.hiddenList]);
     const fieldsmap = reformatFieldsmap([...this.state.showList, ...this.state.hiddenList]);
     const listBody = {
       listId: this.props.listId,
       name: this.props.list.name,
       fieldsmap
     };
-    console.log(this.props.list.fieldsmap);
-    console.log(fieldsmap);
     this.setState({isUpdating: true});
     this.props.patchList(listBody)
     .then(_ => this.setState({isUpdating: false}, this.props.onRequestClose));

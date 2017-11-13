@@ -1130,7 +1130,7 @@ const mapDispatchToProps = (dispatch, props) => {
     searchListContacts: (listId, query) => dispatch(contactActions.searchListContacts(listId, query)),
     patchList: listObj => dispatch(listActions.patchList(listObj)),
     patchContacts: contacts => dispatch(contactActions.patchContacts(contacts)),
-    addContacts: contacts => dispatch(contactActions.addContacts(contacts)),
+    // addContacts: contacts => dispatch(contactActions.addContacts(contacts)),
     createPublication: name => dispatch(publicationActions.createPublication(name)),
     updateOutdatedContacts: contactId => dispatch(contactActions.updateContact(contactId)),
     fetchList: listId => dispatch(listActions.fetchList(listId)),

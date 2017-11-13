@@ -61,6 +61,8 @@ const TemplateManager = props => {
           </div>
         </div>
         <div style={{marginBottom: 50, marginTop: 50}}>
+        {templates.length === 0 &&
+          <div style={{fontSize: '0.9em', color: grey700, margin: 15}} >You haven't created any template yet.</div>}
         {templates.map((template, i) => (
           <ListItem className='row vertical-center'>
             <div className='large-10 medium-10 small-9 columns'>

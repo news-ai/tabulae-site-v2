@@ -97,7 +97,7 @@ class AddContactHOC extends Component {
       const listBody = {
         listId: list.id,
         name: list.name,
-        contacts: list.contacts.length > 0 ? ids : [...list.contacts, ...ids]
+        contacts: [...list.contacts, ...ids]
       };
       this.props.patchList(listBody);
       this.setState({open: false, contactBody: {}, rssfeedsTextarea: '', publicationValues: []});

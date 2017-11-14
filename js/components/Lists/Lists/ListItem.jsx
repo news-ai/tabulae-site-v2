@@ -58,8 +58,8 @@ const MockSpan = styled.h2`
 `;
 
 const ListItem = ({list, onToggle, iconName, tooltip, router, nameString, person, isArchiving, extraIconButtons}) => {
-  const updatedDate = new Date(list.updated);
-  const createdDate = new Date(list.created);
+  const updatedDate = new Date(list.updated * 1000);
+  const createdDate = new Date(list.created * 1000);
   // person.teamid = 0;
   
   return (

@@ -33,14 +33,14 @@ const origin = {horizontal: 'left', vertical: 'top'};
 const bucketListsByDate = (lists, selector) =>
   lists.reduce(({buckets, keys}, list, i) => {
     const prevList = lists[i - 1];
-    const m = moment(list[selector]).tz(moment.tz.guess());
+    const m = moment(list[selector] * 1000).tz(moment.tz.guess());
     const key = `${m.year()} ${m.format('MMMM')}`;
     if (!prevList) {
       buckets[key] = [list];
       keys.push(key);
       return {buckets, keys};
     }
-    const n = moment(prevList[selector]).tz(moment.tz.guess());
+    const n = moment(prevList[selector] * 1000).tz(moment.tz.guess());
     if (m.year() === n.year() && m.month() === n.month()) {
       buckets[key] = [...buckets[key], list];
     } else {

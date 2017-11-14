@@ -212,7 +212,7 @@ const styles = {
 
 const mapStateToProps = (state, props) => {
   const list = state.listReducer[props.listid];
-  console.log(list);
+  // console.log(list);
   return {
     list,
     isFetchingList: get(state, `isFetchingReducer.lists[${props.listid}].isReceiving`, false),
@@ -222,7 +222,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  console.log(props);
+  // console.log(props);
   return {
     fetchAttachments: _ => props.attachments.map(id => dispatch(attachmentActions.fetchAttachment(id))),
     archiveEmail: _ => dispatch(stagingActions.archiveEmail(props.id)),

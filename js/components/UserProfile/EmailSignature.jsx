@@ -41,11 +41,11 @@ class EmailSignature extends Component {
   _handleChange(e, i, newEmail) {
     const emailsignatures = this.props.person.emailsignatures;
     let bodyContent;
-    if (emailsignatures !== null && emailsignatures.some(signature => JSON.parse(signature).email === newEmail)) {
+    if (emailsignatures.some(signature => JSON.parse(signature).email === newEmail)) {
       const sign = emailsignatures.filter(signature => JSON.parse(signature).email === newEmail)[0];
       bodyContent = JSON.parse(sign).data;
     }
-    if (newEmail === this.props.person.email && this.props.signature !== null) {
+    if (newEmail === this.props.person.email && !!this.props.signature) {
       if (isJSON(this.props.signature)) {
         bodyContent = JSON.parse(this.props.signature).data;
       } else {
@@ -80,7 +80,7 @@ class EmailSignature extends Component {
       person.emailsignature = data;
     } else {
       let emailsignatures = this.props.person.emailsignatures;
-      if (emailsignatures === null) emailsignatures = [data];
+      if (emailsignatures.length === 0) emailsignatures = [data];
       else {
         let found = false;
         // find and replace signature if existing
@@ -111,7 +111,7 @@ class EmailSignature extends Component {
     const props = this.props;
     const state = this.state;
     let items = [<MenuItem key={props.person.email} value={props.person.email} primaryText={props.person.email}/>];
-    if (props.person.sendgridemails !== null) {
+    if (props.person.sendgridemails.length > 0) {
       items = [
         ...items,
         ...props.person.sendgridemails.map(email => <MenuItem key={email} value={email} primaryText={email}/>)
@@ -171,7 +171,7 @@ const styles = {
 const mapStateToProps = (state, props) => {
   return {
     person: state.personReducer.person,
-    signature: state.personReducer.person.emailsignature || null,
+    signature: state.personReducer.person.emailsignature,
   };
 };
 

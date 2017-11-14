@@ -169,7 +169,7 @@ function fetchContactsPage(listId, pageLimit, offset) {
 export function loadAllContacts(listId) {
   // const PAGE_LIMIT = 50;
   return (dispatch, getState) => {
-    if (getState().listReducer[listId].contacts === null) return;
+    if (getState().listReducer[listId].contacts.length === 0) return Promise.resolve(true);
     const contacts = getState().listReducer[listId].contacts;
     dispatch({type: 'FETCH_ALL_CONTACTS', listId});
     dispatch(requestContact());
@@ -198,7 +198,7 @@ export function fetchManyContacts(listId, amount) {
     const contacts = getState().listReducer[listId].contacts;
     const offset = getState().listReducer[listId].offset || 0;
     const isReceiving = getState().contactReducer.isReceiving;
-    if (contacts === null) return;
+    if (contacts.length === 0) return Promise.resolve(true);
     const contactCount = contacts.filter(id => getState().contactReducer[id]).length;
     if (offset === null || isReceiving || contactCount === contacts.length) return;
     dispatch({type: 'FETCH_MANY_CONTACTS', listId, amount});
@@ -292,13 +292,6 @@ export function searchListContacts(listId, query) {
   };
 }
 
-// export function updateContact(id) {
-//   return dispatch => {
-//     return api.get(`/contacts/${id}/update`)
-//     .then(response => dispatch(receiveContact(response.data)))
-//     .catch(message => dispatch(requestContactFail(message)));
-//   };
-// }
 
 export function patchContacts(contactList) {
   return dispatch => {

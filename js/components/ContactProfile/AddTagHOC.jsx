@@ -4,6 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {WithContext as ReactTags} from 'react-tag-input';
 import {actions as contactActions} from 'components/Contacts';
+import {fromJS} from 'immutable';
 
 class AddTagHOC extends Component {
   constructor(props) {
@@ -22,9 +23,9 @@ class AddTagHOC extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.tags !== nextProps.tags) {
+    if (!fromJS(this.props.tags).isEqual(fromJS(nextProps.tags))) {
       this.setState({
-        tags: nextProps.tags === null ? [] : nextProps.tags.map((tag, i) => ({id: i, text: tag})),
+        tags: nextProps.tags.map((tag, i) => ({id: i, text: tag})),
       });
     }
   }
@@ -63,7 +64,8 @@ class AddTagHOC extends Component {
     const tags = this.state.tags.map(tag => tag.text);
     window.Intercom('trackEvent', 'add_contact_tag', {tags: JSON.stringify(tags)});
     mixpanel.track('add_contact_tag', {tags: JSON.stringify(tags)});
-    this.props.submitTags(tags).then(_ => this.setState({open: false}));
+    this.props.submitTags(tags)
+    .then(_ => this.setState({open: false}));
   }
 
   render() {

@@ -12,7 +12,7 @@ const ContactCustomDescriptions = ({contact, patchContact, list}) => {
         list.fieldsmap
         .filter(fieldObj => fieldObj.customfield && !fieldObj.readonly)
         .map((fieldObj, i) => {
-          const customValue = contact.customfields !== null && find(contact.customfields, customObj => customObj.name === fieldObj.value);
+          const customValue = find(contact.customfields, customObj => customObj.name === fieldObj.value);
           return (
             <ContactDescriptor
             disabled={contact.readonly}
@@ -22,7 +22,7 @@ const ContactCustomDescriptions = ({contact, patchContact, list}) => {
             contentTitle={fieldObj.name}
             onBlur={(value) => {
               let customfields;
-              if (contact.customfields === null) {
+              if (contact.customfields.length === 0) {
                 customfields = [{name: fieldObj.value, value}];
               } else if (!contact.customfields.some(customObj => customObj.name === fieldObj.value)) {
                 customfields = [...contact.customfields.filter(field => !list.fieldsmap.some(obj => obj.readonly && obj.value === field.name)), {name: fieldObj.value, value}];

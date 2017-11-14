@@ -101,7 +101,7 @@ class ListTable extends Component {
       columnWidths: null,
       dragPositions: [],
       dragged: false,
-      sortPositions: this.props.fieldsmap === null ? null : this.props.fieldsmap.map(fieldObj => fieldObj.sortEnabled ?  0 : 2),
+      sortPositions: this.props.fieldsmap.map(fieldObj => fieldObj.sortEnabled ?  0 : 2),
       onSort: false,
       sortedIds: [],
       lastRowIndexChecked: null,
@@ -195,7 +195,7 @@ class ListTable extends Component {
     this.setHeaderGridRef = ref => (this._HeaderGrid = ref);
     this.setGridHeight = this._setGridHeight.bind(this);
     this.resetSort = () => this.setState({
-      sortPositions: this.props.fieldsmap === null ? null : this.props.fieldsmap.map(fieldObj => fieldObj.sortEnabled ? 0 : 2),
+      sortPositions: this.props.fieldsmap.map(fieldObj => fieldObj.sortEnabled ? 0 : 2),
       onSort: false,
       sortedIds: [],
     });
@@ -234,7 +234,7 @@ class ListTable extends Component {
           this.props.contacts.map(contact => {
             let content;
             if (fieldObj.customfield) {
-              if (contact.customfields === null) return;
+              if (contact.customfields.length === 0) return;
               if (!contact.customfields.some(obj => obj.name === fieldObj.value)) return;
               content = find(contact.customfields, obj => obj.name === fieldObj.value).value;
             } else {
@@ -259,7 +259,7 @@ class ListTable extends Component {
   componentDidMount() {
     const props = this.props;
     window.Intercom('trackEvent', 'opened_sheet', {listId: props.listData.id});
-    mixpanel.track('opened_sheet', {listId: props.listData.id, size: props.listData.contacts !== null ? props.listData.contacts.length : 0});
+    mixpanel.track('opened_sheet', {listId: props.listData.id, size: props.listData.contacts.length});
     INTERVAL_ID = setInterval(_ => {
       if (!this.state.isEmailPanelOpen) this.fetchOperations(this.props, 'partial', 50);
     }, 20000);
@@ -301,7 +301,7 @@ class ListTable extends Component {
         nextProps.contacts.map(contact => {
           let content;
           if (fieldObj.customfield) {
-            if (contact.customfields === null) return;
+            if (contact.customfields.length === 0) return;
             if (!contact.customfields.some(obj => obj.name === fieldObj.value)) return;
             content = find(contact.customfields, obj => obj.name === fieldObj.value).value;
           } else if (fieldObj.tableOnly) {
@@ -570,7 +570,7 @@ class ListTable extends Component {
 
   _fetchOperations(props, fetchType, amount) {
     if (
-      props.listData.contacts !== null &&
+      props.listData.contacts.length > 0 &&
       props.received.length < props.listData.contacts.length
       ) {
       if (fetchType === 'partial' && this.state.pageSize !== -1) return props.fetchManyContacts(props.listId, amount || this.state.pageSize);
@@ -915,7 +915,7 @@ class ListTable extends Component {
             />
           </div>
         {
-          props.fieldsmap !== null &&
+          props.fieldsmap.length > 0 &&
           <div className='vertical-center'>
             <ScatterPlotHOC selected={state.selected} defaultYFieldname='instagramlikes' defaultXFieldname='instagramfollowers' listId={props.listId} fieldsmap={props.fieldsmap}>
             {sc => (

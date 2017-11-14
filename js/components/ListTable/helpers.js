@@ -34,7 +34,7 @@ export function _getter(contact, fieldObj) {
   try {
     if (fieldObj.customfield) {
       if (fieldObj.readonly) return transformTypeValue(fieldObj.type, contact[fieldObj.value]);
-      if (contact.customfields === null) return undefined;
+      if (contact.customfields.length === 0) return undefined;
       else if (!contact.customfields.some(obj => obj.name === fieldObj.value)) return undefined;
       else return transformTypeValue(fieldObj.type, find(contact.customfields, obj => obj.name === fieldObj.value).value);
     } else {
@@ -220,7 +220,7 @@ export function transformFieldsmap(fieldsmap) {
             }
             return fObj;
           }),
-          strategy: contact => contact.tags === null ? [] : contact.tags
+          strategy: contact => contact.tags
         };
       // case 'pastemployers':
       //   return {
@@ -321,7 +321,7 @@ export function convertToCsvString(contacts, fieldsmap) {
     let rowStringArray = [];
     filteredfieldsmap.map(fieldObj => {
       let el;
-      if (fieldObj.customfield && contact.customfields !== null) {
+      if (fieldObj.customfield && contact.customfields.length > 0) {
         if (contact.customfields.some(obj => obj.name === fieldObj.value)) el = find(contact.customfields, obj => obj.name === fieldObj.value).value;
         else el = '';
       } else {

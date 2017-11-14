@@ -106,7 +106,7 @@ class EditMultipleContacts extends Component {
     let strippedCustomfieldsMap = {};
     this.props.list.fieldsmap.filter(fieldObj => strippedCustomfieldsMap[fieldObj.value] = fieldObj.readonly);
     let newContacts = this.props.selectContacts.map(contact => {
-      const fields = contact.customfields === null ? [] : contact.customfields;
+      const fields = contact.customfields;
       const customfields = fields.filter(field => !strippedCustomfieldsMap[field.name] && !patchCustomfields[field.name]);
       Object.keys(patchCustomfields).map(key => customfields.push({name: key, value: patchCustomfields[key]}));
       return Object.assign({}, _getter(contact), patchContact, {customfields});
@@ -116,7 +116,7 @@ class EditMultipleContacts extends Component {
     if (this.state.tags.length > 0) {
       const tags = this.state.tags.map(tag => tag.text);
       newContacts = newContacts.map(contact => {
-        if (contact.tags === null) {
+        if (contact.tags.length === 0) {
           return Object.assign({}, contact, {tags: [...tags]});
         } else {
           // remove dupes

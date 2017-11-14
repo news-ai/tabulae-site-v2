@@ -14,7 +14,6 @@ import PlainEmailsList from './EmailStats/PlainEmailsList.jsx';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 
 const DATEFORMAT = 'YYYY-MM-DD';
-const DEFAULT_DATE = '0001-01-01T00:00:00Z';
 
 const parseDate = datestring => {
   const parts = datestring.split('-').map(num => parseInt(num, 10));
@@ -130,9 +129,7 @@ class AllSentEmailsContainer extends Component {
       .concat(filterLists.map((list, i) =>
         <MenuItem key={i + 1} value={list.id} primaryText={list.name}/>
         ));
-    // console.log(props.router.location);
     const routeKey = props.router.location.pathname;
-    // console.log(props.emails);
     return (
       <div>
       {props.lists &&

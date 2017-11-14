@@ -11,7 +11,6 @@ import {connect} from 'react-redux';
 import get from 'lodash/get';
 import Collapse from 'react-collapse';
 import cn from 'classnames';
-import moment from 'moment-timezone';
 import styled from 'styled-components';
 
 const FORMAT = 'ddd, MMM Do Y, hh:mm A';

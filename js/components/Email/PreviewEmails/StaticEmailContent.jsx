@@ -34,7 +34,7 @@ const AttachmentLineItem = props => {
 
 function StaticEmailContent({to, subject, body, sendat, attachments, files, cc, bcc, fromemail}) {
   let date;
-  if (sendat !== null && sendat !== '0001-01-01T00:00:00Z') date = moment(sendat);
+  if (sendat !== null) date = moment(sendat * 1000);
   return (
     <div className='u-full-width' style={styles.content}>
     {fromemail && fromemail !== null &&

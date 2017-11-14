@@ -88,12 +88,13 @@ export function deleteList(listId) {
       // console.log(response);
       return dispatch({type: 'DELETE_LIST_COMPLETE', listId});
     })
-    .catch( message => dispatch(requestListFail(message)));
+    .catch(message => dispatch(requestListFail(message)));
   };
 }
 
 export function fetchList(listId) {
-  return (dispatch, getState) => {
+  return dispatch => {
+    if (listId === null) return Promise.resolve(true);
     dispatch(requestList(listId));
     return api.get(`/lists/${listId}`)
     .then(response => {
@@ -247,7 +248,7 @@ export function fetchTeamLists() {
     if (OFFSET === null || getState().listReducer.isReceiving) return Promise.resolve(true);
     dispatch(requestLists());
     return api.getQuery({
-      endpoint: `/lists/teams`,
+      endpoint: `/lists/team`,
       query: {limit: PAGE_LIMIT, offset: OFFSET}
     })
     .then(response => {
@@ -370,7 +371,6 @@ export function archiveListToggle(listId, order='archived') {
     dispatch({ type: ARCHIVE_LIST, listId});
     return api.get(`/lists/${listId}/archive`)
     .then(response => {
-      console.log(response);
       const res = normalize(response.data, listSchema);
       dispatch({type: 'RESET_LIST_REDUCER_ORDER', order});
       return dispatch(receiveList(res.entities.lists, res.result));

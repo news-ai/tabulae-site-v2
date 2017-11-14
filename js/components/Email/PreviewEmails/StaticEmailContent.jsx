@@ -6,9 +6,6 @@ import FontIcon from 'material-ui/FontIcon';
 import isEmpty from 'lodash/isEmpty';
 
 const styles = {
-  content: {
-    // margin: '5px',
-  },
   span: {
     margin: '10px 5px'
   },
@@ -36,7 +33,7 @@ function StaticEmailContent({to, subject, body, sendat, attachments, files, cc, 
   let date;
   if (sendat !== null) date = moment(sendat * 1000);
   return (
-    <div className='u-full-width' style={styles.content}>
+    <div className='u-full-width'>
     {fromemail && fromemail !== null &&
       <div className='vertical-center' style={styles.span}><strong style={styles.strong}>From</strong>{fromemail}</div>}
       <div className='vertical-center' style={styles.span}><strong style={styles.strong}>To</strong>{to}</div>

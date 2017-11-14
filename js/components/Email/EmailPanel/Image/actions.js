@@ -8,7 +8,7 @@ export function uploadImage(file) {
     data.append('file', file);
     return api.postFile(`/emails/upload`, data)
     .then(response => {
-      const src = response.data[0].url;
+      const src = response.data.url;
       dispatch({type: imgConstant.RECEIVE, src});
       return src;
     })

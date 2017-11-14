@@ -74,9 +74,9 @@ class AnalyticsItem extends Component {
     const state = this.state;
     const wrapperStyle = (bounced || !delivered) ? Object.assign({}, styles.wrapper, {backgroundColor: deepOrange100}) : styles.wrapper;
     const SUBTRING_LIMIT = 20;
-    let sendAtDate = moment(sendat);
-    const sendAtDatestring = sendat === DEFAULT_DATESTRING ? 'IMMEDIATE' : sendAtDate.tz(moment.tz.guess()).format(FORMAT);
-    let createdDate = moment(created);
+    let sendAtDate = moment(sendat * 1000);
+    const sendAtDatestring = sendat === null ? 'IMMEDIATE' : sendAtDate.tz(moment.tz.guess()).format(FORMAT);
+    let createdDate = moment(created * 1000);
     const recepientString = contact ? `${contact.firstname} ${contact.lastname} <${to}>` : to;
 
     let listNameString = list ? list.name : `(Archived) ${listid}`;

@@ -124,12 +124,13 @@ export function deleteContact(contactId) {
   };
 }
 
-export function deleteContacts(ids) {
+export function deleteContacts(ids, listid) {
   return dispatch => {
     dispatch({type: 'DELETE_CONTACTS', ids});
-    return api.post(`/contacts/bulkdelete`, {contacts: ids})
+    console.log('deleteContacts', {ids, listid});
+    return api.post(`/contacts/bulkdelete`, {contacts: ids, listid})
     .then(response => {
-      // console.log(response);
+      console.log(response);
       return dispatch({type: 'DELETED_CONTACTS', data: response.data});
     })
     .catch(err => console.log(err));

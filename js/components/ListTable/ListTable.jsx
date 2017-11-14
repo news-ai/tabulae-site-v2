@@ -667,12 +667,8 @@ class ListTable extends Component {
         this.setState({isDeleting: true, currentPage});
 
         // TODO: SHOULDNT ALLOW DELETE NOW, use /contacts/<id>/delete-from-list endpoint
-        this.props.deleteContacts(selected)
-        // .then(_ => this.props.patchList({
-        //   listId: this.props.listId,
-        //   contacts: newListContacts,
-        //   name: this.props.listData.name,
-        // }))
+        this.props.deleteContacts(selected, this.props.listId)
+        .then(_ => this.props.fetchList())
         .then(_ => {
           // clean up contacts after list to prevent list rendering undefined contacts
           this.setState({isDeleting: false, scrollToRow: minListPosition === 0 ? 0 : minListPosition - 1});
@@ -1133,11 +1129,11 @@ const mapDispatchToProps = (dispatch, props) => {
     patchList: listObj => dispatch(listActions.patchList(listObj)),
     createPublication: name => dispatch(publicationActions.createPublication(name)),
     // updateOutdatedContacts: contactId => dispatch(contactActions.updateContact(contactId)),
-    fetchList: listId => dispatch(listActions.fetchList(listId)),
+    fetchList: _ => dispatch(listActions.fetchList(props.listId)),
     fetchContacts: listId => dispatch(contactActions.fetchContacts(listId)),
     searchPublications: query => dispatch(publicationActions.searchPublications(query)),
     clearSearchCache: listId => dispatch({type: 'CLEAR_LIST_SEARCH', listId}),
-    deleteContacts: ids => dispatch(contactActions.deleteContacts(ids)),
+    deleteContacts: (...args) => dispatch(contactActions.deleteContacts(...args)),
     loadAllContacts: listId => dispatch(contactActions.loadAllContacts(listId)),
     removeFirstTimeUser: _ => dispatch(loginActions.removeFirstTimeUser()),
     fetchManyContacts: (listId, amount) => dispatch(contactActions.fetchManyContacts(listId, amount)),

@@ -19,3 +19,5 @@ deployment:
     branch: master
     commands:
       - cd $HOME/$CIRCLE_PROJECT_REPONAME && aws s3 sync build s3://tabulae.newsai.com --delete
+      - aws configure set preview.cloudfront true
+      - aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID --paths /

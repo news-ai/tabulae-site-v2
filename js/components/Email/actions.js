@@ -442,7 +442,7 @@ export function fetchSearchSentEmails(queryString) {
     if (!OFFSET) OFFSET = 0;
     dispatch({type: REQUEST_MULTIPLE_EMAILS, query: queryString});
     return api.getQuery({
-      endpoint: '/emails/search',
+      endpoint: '/emails',
       query: {q: `"${queryString}"`}
     })
     .then(response => {
@@ -495,7 +495,7 @@ export function fetchLimitedSpecificDayEmails(day, offset, limit, accumulator, t
   return dispatch => {
     dispatch({type: 'REQUEST_LIMITED_SPECIFIC_DAY_SENT_EMAILS', day, offset, limit});
     return api.getQuery({
-      endpoint: '/emails/search',
+      endpoint: '/emails',
       query: {q: `date:${day}`, limit, offset}
     })
     .then(
@@ -576,8 +576,8 @@ function createQueryUrl(query) {
 
   const queryString = keys
   .filter(key => query[key])
-  .map(key => `${key}:${query[key]}`).join(',');
-  return `/emails/search/?q="${queryString}"`;
+  .map(key => `${key}=${query[key]}`).join(',');
+  return `/emails/?${queryString}`;
 }
 
 export function fetchLimitedQueryEmails(query, offset, limit, accumulator, threshold) {
@@ -586,6 +586,8 @@ export function fetchLimitedQueryEmails(query, offset, limit, accumulator, thres
     dispatch({type: 'REQUEST_LIMITED_QUERY_SENT_EMAILS', query, offset, limit});
     dispatch({type: 'STAGING_MANUALLY_SET_ISRECEIVING_ON'});
     const url = createQueryUrl(query);
+    console.log(query);
+    console.log(url);
 
     return api.get(`${url}&limit=${limit}&offset=${offset}`)
     .then(

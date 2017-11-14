@@ -321,6 +321,7 @@ const mapDispatchToProps = (dispatch, props) => {
   const date = props.router.location.query.date;
   const subject = props.router.location.query.subject;
   const filter = props.router.location.query.filter;
+  const campaign = props.router.location.query.campaign;
   const baseSubject = props.router.location.query.baseSubject;
 
   let fetchEmails = _ => dispatch(stagingActions.fetchSentEmails());
@@ -329,7 +330,7 @@ const mapDispatchToProps = (dispatch, props) => {
   if (listId > 0) {
     fetchEmails = _ => dispatch(stagingActions.fetchListEmails(listId));
   }
-  if (date || subject || baseSubject || filter) {
+  if (date || subject || baseSubject || filter || campaign) {
     let query = {date};
     if (baseSubject) query.baseSubject = baseSubject;
     else query.subject = subject;
@@ -339,10 +340,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
   return {
     fetchEmails,
-    // refreshEmails: _ => {
-    //   dispatch({type: 'RESET_STAGING_OFFSET'});
-    //   dispatch(stagingActions.fetchSentEmails());
-    // },
     fetchLists: _ => dispatch(listActions.fetchLists()),
     fetchListEmails: id => dispatch(stagingActions.fetchListEmails(id)),
     fetchSpecificDayEmails: day => dispatch(stagingActions.fetchSpecificDayEmails(day)),

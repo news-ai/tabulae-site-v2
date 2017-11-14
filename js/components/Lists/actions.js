@@ -370,6 +370,7 @@ export function archiveListToggle(listId, order='archived') {
     dispatch({ type: ARCHIVE_LIST, listId});
     return api.get(`/lists/${listId}/archive`)
     .then(response => {
+      console.log(response);
       const res = normalize(response.data, listSchema);
       dispatch({type: 'RESET_LIST_REDUCER_ORDER', order});
       return dispatch(receiveList(res.entities.lists, res.result));

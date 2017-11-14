@@ -73,11 +73,13 @@ const Campaign = ({
   bounces,
   date,
   router,
-  updated
+  updated,
+  id
 }) => {
-  let query = {date: updated};
-  if (baseSubject) query.baseSubject = baseSubject;
-  else query.subject = subject;
+  // let query = {date: moment(updated * 1000).format('YYYY-MM-DD')};
+  // if (baseSubject) query.baseSubject = baseSubject;
+  // else query.subject = subject;
+  let query = {campaign: id};
   return (
     <Paper className='row' zDepth={1} style={styles.container}>
       <div className='large-12 medium-12 small-12 columns'>

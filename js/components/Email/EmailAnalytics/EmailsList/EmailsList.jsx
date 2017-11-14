@@ -23,7 +23,7 @@ const DEFAULT_SENDAT = '0001-01-01T00:00:00Z';
 const reformatEmails = (emails, prevDateOrder) => {
   if (!emails || emails.length === 0) return {dateOrder: [], emailMap: {}, reformattedEmails: []};
   const emailMap = emails.reduce((acc, email) => {
-    const sendat = email.sendat === DEFAULT_SENDAT ? email.created : email.sendat;
+    const sendat = email.sendat === null ? email.created * 1000 : email.sendat * 1000;
     const datestring = new Date(sendat).toLocaleDateString();
     acc[datestring] = acc[datestring] ? [...acc[datestring], email] : [email];
     return acc;

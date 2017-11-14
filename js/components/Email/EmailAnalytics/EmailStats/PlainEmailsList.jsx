@@ -62,7 +62,7 @@ class PlainEmailsList extends Component {
   _rowRenderer({key, index, isScrolling, isVisible, style}) {
     const rightNow = new Date();
     const email = this.props.emails[index];
-    const renderNode = new Date(email.sendat) > rightNow ?
+    const renderNode = new Date(email.sendat * 1000) > rightNow ?
     <ScheduledEmailItem key={`email-analytics-${index}`} {...email}/> :
     <AnalyticsItem
     key={`email-analytics-${index}`}

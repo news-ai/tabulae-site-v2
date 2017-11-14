@@ -115,7 +115,7 @@ class EmailSettings extends Component {
         <FlatButton
         secondary
         label='Remove'
-        onClick={_ => (window.location.href = 'https://tabulae.newsai.org/api/auth/remove-gmail')}
+        onClick={props.removeEmailIntegrations}
         />);
       outlookNode = <span style={styles.notAvailableSpan}>Connected via Gmail</span>;
       smtpNode = <span style={styles.notAvailableSpan}>Connected via Gmail</span>;
@@ -126,7 +126,7 @@ class EmailSettings extends Component {
         <FlatButton
         secondary
         label='Remove'
-        onClick={_ => (window.location.href = 'https://tabulae.newsai.org/api/auth/remove-outlook')}
+        onClick={props.removeEmailIntegrations}
         />);
       smtpNode = <span style={styles.notAvailableSpan}>Connected via Outlook</span>;
     }
@@ -227,7 +227,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     patchPerson: body => dispatch(loginActions.patchPerson(body)),
-    getEmailMaxAllowance: () => dispatch(loginActions.getEmailMaxAllowance())
+    getEmailMaxAllowance: () => dispatch(loginActions.getEmailMaxAllowance()),
+    removeEmailIntegrations: () => dispatch(loginActions.removeEmailIntegrations()),
   };
 };
 

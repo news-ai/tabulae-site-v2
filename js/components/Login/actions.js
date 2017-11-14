@@ -153,3 +153,13 @@ export function patchPerson(personBody) {
     });
   };
 }
+
+export function removeEmailIntegrations() {
+  return dispatch => {
+    return api.get('/users/me/remove-integrations')
+    .then(response => dispatch(receiveLogin(response.data)))
+    .catch(message => {
+      if (process.env.NODE_ENV === 'development') console.log(message);
+    });
+  }
+}

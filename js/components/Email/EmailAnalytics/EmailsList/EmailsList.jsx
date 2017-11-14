@@ -17,9 +17,6 @@ import OpenAnalytics from './OpenAnalytics.jsx';
 import LinkAnalytics from './LinkAnalytics.jsx';
 import StaticEmailContent from 'components/Email/PreviewEmails/StaticEmailContent.jsx';
 
-const DEFAULT_SENDAT = '0001-01-01T00:00:00Z';
-
-
 const reformatEmails = (emails, prevDateOrder) => {
   if (!emails || emails.length === 0) return {dateOrder: [], emailMap: {}, reformattedEmails: []};
   const emailMap = emails.reduce((acc, email) => {

@@ -173,13 +173,4 @@ const styles = {
   placeholder: {color: grey700, fontSize: '0.9em'},
 };
 
-
-const mapStateToProps = (state, props) => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch, props) => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlainEmailsList);
+export default PlainEmailsList;

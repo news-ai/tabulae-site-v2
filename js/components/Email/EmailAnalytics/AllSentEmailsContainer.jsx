@@ -254,6 +254,7 @@ const mapStateToProps = (state, props) => {
   const subject = props.router.location.query.subject;
   const baseSubject = props.router.location.query.baseSubject;
   const filter = props.router.location.query.filter;
+  const campaign = props.router.location.query.campaign;
   let hasNext = true;
   let validators = [];
   if (listId === 0) {
@@ -283,7 +284,7 @@ const mapStateToProps = (state, props) => {
     validators.push(
       id => {
         const email = state.stagingReducer[id];
-        const datestring = moment.utc(email.created).format(DATEFORMAT);
+        const datestring = moment.utc(email.created * 1000).format(DATEFORMAT);
         return datestring === date;
       });
   }

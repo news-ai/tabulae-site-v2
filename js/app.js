@@ -123,10 +123,13 @@ ReactDOM.render(
           <Route path='/' name='Home' component={App}>
             <IndexRoute component={ListManagerContainer} />
             <Route path='lists' name='List Manager' component={ListManagerContainer} />
-            <Route path='contacts' name='Contacts' component={ContactTags} />
+            <Route path='contacts/:contactId' name='Contacts' component={ContactProfile} />
+            <Route path='contacttags' name='Contact Tags' component={ContactTags} />
             <Route path='tables/:listId' staticName name='Table'>
               <IndexRoute component={ListFetchingContainer} />
+            {/*
               <Route path=':contactId' staticName name='Profile' component={ContactProfile} />
+            */}
             </Route>
             <Route path='tags/:tag' staticName name='Tag Search' component={TagListsContainer} />
             <Route path='clients' staticName name='Clients' component={ClientDirectories}>

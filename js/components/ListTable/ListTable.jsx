@@ -506,7 +506,7 @@ class ListTable extends Component {
           break;
         case 'profile':
           contentBody = (
-              <Link to={`/tables/${this.props.listId}/${rowData.id}`}>
+              <Link to={`/contacts/${rowData.id}`}>
                 <FontIcon
                 id='profile_hop'
                 className='fa fa-arrow-right'

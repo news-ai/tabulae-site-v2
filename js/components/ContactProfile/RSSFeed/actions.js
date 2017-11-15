@@ -4,9 +4,9 @@ import {normalize, Schema, arrayOf} from 'normalizr';
 const feedSchema = new Schema('feeds');
 // const listSchema = new Schema('lists');
 
-export function addFeed(contactid, listid, feedUrl) {
+export function addFeed(contactid, feedUrl) {
   return dispatch => {
-    const feedBody = {contactid, listid, url: feedUrl};
+    const feedBody = {contactid, url: feedUrl};
     dispatch({type: feedConstant.ADD_REQUESTED, body: feedBody});
     return api.post(`/feeds`, feedBody)
     .then(response => dispatch({type: feedConstant.ADD_RECEIVED, response}))
@@ -28,9 +28,8 @@ export function fetchContactFeeds(contactId) {
     dispatch({type: feedConstant.REQUEST_MULTIPLE, contactId});
     return api.get(`/contacts/${contactId}/feeds`)
     .then(response => {
-      const res = normalize(response, {
-        data: arrayOf(feedSchema),
-      });
+      const res = normalize(response, {data: arrayOf(feedSchema)});
+      console.log(response);
       return dispatch({
         type: feedConstant.RECEIVE_MULTIPLE,
         feeds: res.entities.feeds,

@@ -45,9 +45,9 @@ class HeadlineItemContainer extends Component {
 
   componentDidMount() {
     const props = this.props;
-    if (!props.publisherName && !props.isReceiving) {
-      props.fetchPublication(props.publicationid);
-    }
+    // if (!props.publisherName && !props.isReceiving) {
+    //   props.fetchPublication(props.publicationid);
+    // }
   }
 
   render() {

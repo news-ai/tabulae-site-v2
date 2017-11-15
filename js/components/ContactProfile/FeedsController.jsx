@@ -24,11 +24,11 @@ class FeedsController extends Component {
   _addFeedClick() {
     const props = this.props;
     if (this.state.feedUrl.length === 0) return;
-    props.addFeed(props.contactId, props.listId, this.state.feedUrl);
+    props.addFeed(props.contactId, this.state.feedUrl);
     this.togglePanel();
     window.Intercom('trackEvent', 'add_feed');
     mixpanel.track('add_feed');
-    window.location.reload();
+    // window.location.reload();
   }
 
   render() {
@@ -78,7 +78,6 @@ class FeedsController extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const listId = props.listId;
   const contactId = props.contactId;
   const feeds = state.feedReducer[contactId] && state.feedReducer[contactId].map(id => state.feedReducer[id]);
   const attachedfeeds = feeds && feeds.map(feed => feed.url);
@@ -90,7 +89,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addFeed: (contactid, listid, url) => dispatch(feedActions.addFeed(contactid, listid, url)),
+    addFeed: (contactid, url) => dispatch(feedActions.addFeed(contactid, url)),
     deleteFeed: feedId => dispatch(feedActions.deleteFeed(feedId)),
     fetchContactFeeds: (contactId) => dispatch(feedActions.fetchContactFeeds(contactId)),
   };

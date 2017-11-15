@@ -1,5 +1,5 @@
 import {instagramConstant} from './constants';
-import * as api from '../../../actions/api';
+import * as api from 'actions/api';
 import {normalize, Schema, arrayOf} from 'normalizr';
 const instagramSchema = new Schema('instagrams', {idAttribute: 'instagramid'});
 
@@ -11,7 +11,10 @@ export function fetchContactInstagrams(contactId) {
     const isReceiving = getState().instagramReducer.isReceiving;
     if (OFFSET === null || isReceiving) return;
     dispatch({type: instagramConstant.REQUEST, contactId});
-    return api.get(`/contacts/${contactId}/instagrams?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/contacts/${contactId}/instagrams`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const res = normalize(response, {data: arrayOf(instagramSchema)});
       return dispatch({

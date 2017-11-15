@@ -1,7 +1,7 @@
 import {
   tweetConstant,
 } from './constants';
-import * as api from '../../../actions/api';
+import * as api from 'actions/api';
 import {normalize, Schema, arrayOf} from 'normalizr';
 const tweetSchema = new Schema('tweets', {idAttribute: 'tweetid'});
 // const listSchema = new Schema('lists');
@@ -14,7 +14,10 @@ export function fetchContactTweets(contactId) {
     const isReceiving = getState().tweetReducer.isReceiving;
     if (OFFSET === null || isReceiving) return;
     dispatch({type: tweetConstant.REQUEST_MULTIPLE, contactId});
-    return api.get(`/contacts/${contactId}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
+    return api.getQuery({
+      endpoint: `/contacts/${contactId}/tweets`,
+      query: {limit: PAGE_LIMIT, offset: OFFSET}
+    })
     .then(response => {
       const res = normalize(response, {
         data: arrayOf(tweetSchema),

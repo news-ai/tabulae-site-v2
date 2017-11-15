@@ -82,8 +82,6 @@ class ContactProfile extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.listDidInvalidate) window.location.href = window.location.origin + '/notfound';
-    // if (nextProps.contactDidInvalidate) window.location.href = window.location.origin + '/notfound';
     const node = ReactDOM.findDOMNode(this.refs.tabs);
     if (node) {
       let containerWidth = node.offsetWidth;

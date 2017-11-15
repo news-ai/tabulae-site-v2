@@ -25,6 +25,7 @@ class SocialDataGraph extends Component {
     const props = this.props;
     const state = this.state;
     let data = props.data;
+    console.log(data);
     const dataKeys = props.dataKeys.filter(key => state.params[key]);
     if (state.averageBy !== null) {
       data = props.data.map(dataObj => {

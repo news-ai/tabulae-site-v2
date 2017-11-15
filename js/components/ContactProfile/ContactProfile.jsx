@@ -81,6 +81,10 @@ class ContactProfile extends Component {
     this.props.fetchContactFeeds(this.props.contactId);
   }
 
+  componentDidMount() {
+    this.props.fetchListsContactBelongsTo(this.props.contactId);
+  }
+
   componentWillReceiveProps(nextProps) {
     const node = ReactDOM.findDOMNode(this.refs.tabs);
     if (node) {
@@ -390,6 +394,7 @@ function mapDispatchToProps(dispatch, props) {
     fetchList: listId => dispatch(listActions.fetchList(listId)),
     removeFirstTimeUser: _ => dispatch(loginActions.removeFirstTimeUser()),
     turnOnGeneralGuide: _ => dispatch(joyrideActions.turnOnGeneralGuide()),
+    fetchListsContactBelongsTo: contactid => dispatch(contactActions.fetchListsContactBelongsTo(contactid)),
   };
 }
 

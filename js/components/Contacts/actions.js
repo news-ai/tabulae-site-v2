@@ -314,7 +314,6 @@ export function addContacts(contactList) {
     dispatch({type: ADDING_CONTACT, contactList});
     return api.post(`/contacts`, contactList)
     .then(response => {
-      console.log(response);
       const res = normalize(response, {
         data: arrayOf(contactSchema),
         included: arrayOf(publicationSchema)
@@ -326,4 +325,26 @@ export function addContacts(contactList) {
   };
 }
 
+export function fetchListsContactBelongsTo(contactid) {
+  return dispatch => {
+    dispatch({type: 'FETCH_LISTS_CONTACT_BELONGS_TO', contactid});
+    return api.get(`/contacts/${contactid}/lists`)
+    .then(response => {
+      console.log(response);
+      const res = normalize(response, {data: arrayOf(listSchema)});
+      console.log(res);
+      dispatch({type: 'RECEIVE_LISTS_CONTACT_BELONGS_TO', ids: res.result.data});
+      return dispatch({
+        type: listConstant.RECEIVE_MULTIPLE,
+        lists: res.entities.lists,
+        ids: res.result.data,
+      });
+
+    })
+    .catch(message => {
+      console.log(message);
+      return dispatch({type: 'FETCH_LISTS_CONTACT_BELONGS_TO_FAIL', message});
+    });
+  }
+}
 

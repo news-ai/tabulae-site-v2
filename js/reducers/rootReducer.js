@@ -32,6 +32,7 @@ import emailStatsReducer from 'components/Email/EmailAnalytics/EmailStats/reduce
 import isFetchingReducer from 'components/IsFetching/reducer';
 import campaignStatsReducer from 'components/Email/EmailAnalytics/Campaign/reducer';
 import contactTagReducer from 'components/Contacts/ContactTags/reducer';
+import listsContactBelongsToReducer from 'components/Contacts/ListsContactBelongsTo/reducer';
 
 import {searchPublicationsEpic} from 'components/Publications/epics';
 import {fetchPerson, setupThirdparty} from 'components/Login/epics';
@@ -69,7 +70,8 @@ const rootReducer = combineReducers({
   emailStatsReducer,
   isFetchingReducer,
   campaignStatsReducer,
-  contactTagReducer
+  contactTagReducer,
+  listsContactBelongsToReducer
 });
 
 export const rootEpic = combineEpics(

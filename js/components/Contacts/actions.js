@@ -255,7 +255,12 @@ function fetchSearchListContacts(listId, query) {
       if (total > response.data.length) {
         // build array of offsets
         const offsets = Array.from({length: Math.floor(total / LIMIT)}, (v, i) => i + LIMIT);
-        const promises = offsets.map(offset => api.get(`/lists/${listId}/contacts?q="${query}"&limit=${LIMIT}&offset=${offset}`));
+        const promises = offsets.map(offset =>
+          api.getQuery({
+            endpoint: `/lists/${listId}/contacts`,
+            query: {q: `"${query}"`, limit: LIMIT, offset: offset}
+          })
+          );
         return Promise.all(promises)
         .then(responses => {
           // include first result
@@ -330,16 +335,13 @@ export function fetchListsContactBelongsTo(contactid) {
     dispatch({type: 'FETCH_LISTS_CONTACT_BELONGS_TO', contactid});
     return api.get(`/contacts/${contactid}/lists`)
     .then(response => {
-      console.log(response);
       const res = normalize(response, {data: arrayOf(listSchema)});
-      console.log(res);
-      dispatch({type: 'RECEIVE_LISTS_CONTACT_BELONGS_TO', ids: res.result.data});
-      return dispatch({
+      dispatch({
         type: listConstant.RECEIVE_MULTIPLE,
         lists: res.entities.lists,
         ids: res.result.data,
       });
-
+      return dispatch({type: 'RECEIVE_LISTS_CONTACT_BELONGS_TO', contactid, ids: res.result.data});
     })
     .catch(message => {
       console.log(message);

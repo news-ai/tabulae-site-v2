@@ -59,21 +59,20 @@ export function searchPublications(query) {
   return (dispatch, getState) => {
     // implement search for match in cache first then after some time make the search call
     // maybe do some timeout
+    if (!query || query.length === 0) return Promise.resolve([]);
     dispatch({type: 'SEARCH_PUBLICATION_REQUEST', query});
     dispatch(requestPublication());
     return api.getQuery({
       endpoint: `/publications`,
       query: {q: `"${query}"`}
     })
-      .then( response => {
-        const res = normalize(response, {
-          data: arrayOf(publicationSchema)
-        });
+      .then(response => {
+        const res = normalize(response, {data: arrayOf(publicationSchema)});
         dispatch(receivePublications(res.entities.publications, res.result.data));
         const responseNameArray = response.data.map(publication => publication.name);
         return responseNameArray;
       })
-      .catch( message => dispatch({type: 'SEARCH_PUBLICATION_FAIL', message}));
+      .catch(message => dispatch({type: 'SEARCH_PUBLICATION_FAIL', message}));
   };
 }
 

@@ -12,10 +12,13 @@ const publicationSchema = new Schema('publications');
 export const searchPublicationsEpic = action$ =>
   action$.ofType('SEARCH_PUBLICATION_REQUEST')
   .map(action => action.query)
-  .filter(q => !!q)
+  .filter(q => !!q && q.length > 0)
   // .debounceTime(750)
   .switchMap(q =>
-     api.get(`/publications?q="${q}"`)
+     api.getQuery({
+      endpoint: '/publications',
+      query: {search: `"${q}"`}
+     })
     .then(response => normalize(response, {data: arrayOf(publicationSchema)})))
   .flatMap(res => {
     return [

@@ -44,23 +44,23 @@ class CopyToHOC extends Component {
 
   _onNewSheetSubmit() {
     const val = this.refs.copyToHOC_newSheetName.input.value;
-    const includeCustom = this.includeCustomCheckbox.checked;
+    // const includeCustom = this.includeCustomCheckbox.checked;
     let listname = val.length > 0 ? val : `${this.props.list.name} (Copy)`;
     const contacts = this.props.selectedContacts.map(contact => contact.id);
     this.setState({isReceiving: true});
-    if (includeCustom) {
-      this.props.copyToNewList(
-        contacts,
-        listname,
-        this.props.list.fieldsmap
-        .filter(field => field.customfield && !field.readonly)
-        .map(({name, value, customfield, hidden}) => ({name, value, customfield, hidden}))
-        )
-      .then(_ => this.setState({isReceiving: false}));
-    } else {
-      this.props.copyToNewList(contacts, listname)
-      .then(_ => this.setState({isReceiving: false}));
-    }
+    // if (includeCustom) {
+    //   this.props.copyToNewList(
+    //     contacts,
+    //     listname,
+    //     this.props.list.fieldsmap
+    //     .filter(field => field.customfield && !field.readonly)
+    //     .map(({name, value, customfield, hidden}) => ({name, value, customfield, hidden}))
+    //     )
+    //   .then(_ => this.setState({isReceiving: false}));
+    // } else {
+    this.props.copyToNewList(contacts, listname)
+    .then(_ => this.setState({isReceiving: false}));
+    // }
     window.Intercom('trackEvent', 'copy_to_new_sheet');
     mixpanel.track('copy_to_new_sheet');
   }
@@ -141,12 +141,14 @@ class CopyToHOC extends Component {
                 />
               </div>
             </div>
+          {/*
             <div className='large-12 medium-12 small-12 columns horizontal-center'>
               <div className='vertical-center'>
                 <span className='smalltext' style={{marginRight: 10}}>Include Custom Properties</span>
                 <input defaultChecked ref={ref => this.includeCustomCheckbox = ref} type='checkbox' />
               </div>
             </div>
+          */}
             <div className='large-12 medium-12 small-12 columns horizontal-center' style={{margin: '20px 0'}} >
               <RaisedButton
               primary

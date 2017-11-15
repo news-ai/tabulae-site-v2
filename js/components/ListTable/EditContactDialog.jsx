@@ -83,7 +83,7 @@ class EditContactDialog extends Component {
     this.handleAddition = this._handleAddition.bind(this);
     this.handleDelete = this._handleDelete.bind(this);
     this.handleDrag = this._handleDrag.bind(this);
-    this.onRemoveContact = this._onRemoveContact.bind(this);
+    // this.onRemoveContact = this._onRemoveContact.bind(this);
     this.onPublicationAddOpen = _ => this.setState({addPublicationPanelOpen: true});
     this.onPublicationAddClose = _ => this.setState({addPublicationPanelOpen: false});
     this.getMultiPublicationOptions = debounce(this.getMultiPublicationOptions.bind(this), 750);
@@ -157,23 +157,23 @@ class EditContactDialog extends Component {
     this.props.addFeeds(id, feeds);
   }
 
-  _onRemoveContact() {
-    alertify.promisifyConfirm('Delete Contact', `This action cannot be reversed. Are you sure you want to delete?`)
-    .then(
-      _ => {
-        const newListContacts = this.props.list.contacts.filter(id => id !== this.props.contactId);
-        this.props.deleteContacts([this.props.contactId]);
-        this.setState({isDeleting: true});
-        this.props.patchList({
-          listId: this.props.listId,
-          contacts: newListContacts,
-          name: this.props.list.name,
-        })
-        .then(_ => this.setState({isDeleting: false}, this.props.onClose));
-      },
-      _ => {}
-      );
-  }
+  // _onRemoveContact() {
+  //   alertify.promisifyConfirm('Delete Contact', `This action cannot be reversed. Are you sure you want to delete?`)
+  //   .then(
+  //     _ => {
+  //       const newListContacts = this.props.list.contacts.filter(id => id !== this.props.contactId);
+  //       this.props.deleteContacts([this.props.contactId]);
+  //       this.setState({isDeleting: true});
+  //       this.props.patchList({
+  //         listId: this.props.listId,
+  //         contacts: newListContacts,
+  //         name: this.props.list.name,
+  //       })
+  //       .then(_ => this.setState({isDeleting: false}, this.props.onClose));
+  //     },
+  //     _ => {}
+  //     );
+  // }
 
   _handleDelete(i) {
     this.setState({
@@ -220,9 +220,11 @@ class EditContactDialog extends Component {
       {props.isReceiving &&
         <FontIcon className='fa fa-spinner fa-spin'/>}
         <div className='row' style={{marginTop: 20}}>
+      {/*
           <div className='large-12 medium-12 small-12 columns right'>
             <div className='button' onClick={this.onRemoveContact}>Remove Contact from List</div>
           </div>
+      */}
           <div className={columnClassname}>
             <Label>First Name</Label>
             <TextField
@@ -352,7 +354,7 @@ class EditContactDialog extends Component {
             </div>
           </div>
           <div className='large-12 medium-12 small-12 columns vertical-center'>
-            {!state.addPublicationPanelOpen &&
+          {!state.addPublicationPanelOpen &&
             <div style={{marginTop: 5, marginLeft: 5}}>
               <span className='smalltext'>Don't see a publication you need? </span>
               <span
@@ -409,7 +411,7 @@ const mapDispatchToProps = (dispatch, props) => {
     requestPublication: () => dispatch(publicationActions.requestPublication()),
     deleteContacts: ids => dispatch(contactActions.deleteContacts(ids)),
     patchList: listObj => dispatch(listActions.patchList(listObj)),
-    searchPublicationEpic: query => dispatch({type: 'SEARCH_PUBLICATION_REQUEST', query})
+    // searchPublicationEpic: query => dispatch({type: 'SEARCH_PUBLICATION_REQUEST', query})
   };
 };
 

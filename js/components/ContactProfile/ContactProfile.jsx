@@ -134,6 +134,8 @@ class ContactProfile extends Component {
   render() {
     const state = this.state;
     const props = this.props;
+    console.log(props.contact);
+    console.log(props.listsBelong);
 
     return (
       <div className='row align-center'>
@@ -155,10 +157,11 @@ class ContactProfile extends Component {
           {
           props.contact && (
             <div className='row' style={styles.contact.container}>
-            {
-
-            }
-              <ContactProfileDescriptions className='large-6 medium-12 small-12 columns' list={props.list} contact={props.contact} {...props}/>
+              <ContactProfileDescriptions
+              className='large-6 medium-12 small-12 columns'
+              contact={props.contact}
+              {...props}
+              />
               <div className='large-6 medium-12 small-12 columns'>
                 <div className='row'>
                   <div className='large-12 medium-12 small-12 columns'>
@@ -264,49 +267,45 @@ class ContactProfile extends Component {
             defaultActiveKey='/emailstats'
             activeKey={state.activeKey}
             onChange={this.onTabChange}
-            renderTabBar={() => <ScrollableInkTabBar/>}
+            renderTabBar={() => <ScrollableInkTabBar />}
             renderTabContent={() => <TabContent/>}
             >
-              <TabPane placeholder={<Placeholder/>} tab='All' key='all'>
+              <TabPane placeholder={<Placeholder />} tab='All' key='all'>
                 <div style={styles.feedInnerContainer}>
                   <MixedFeed
                   containerHeight={700}
                   containerWidth={state.containerWidth}
                   contactId={props.contactId}
-                  listId={props.listId}
                   />
                 </div>
               </TabPane>
-              <TabPane placeholder={<Placeholder/>} tab='RSS Only' key='rss'>
+              <TabPane placeholder={<Placeholder />} tab='RSS Only' key='rss'>
                 <div style={styles.feedInnerContainer}>
                   <Headlines
                   refName='rss'
                   containerHeight={700}
                   containerWidth={state.containerWidth}
                   contactId={props.contactId}
-                  listId={props.listId}
                   />
                 </div>
               </TabPane>
-              <TabPane placeholder={<Placeholder/>} tab='Tweets Only' key='tweets'>
+              <TabPane placeholder={<Placeholder />} tab='Tweets Only' key='tweets'>
                 <div style={styles.feedInnerContainer}>
                   <TweetFeed
                   refName='twitter'
                   containerHeight={700}
                   containerWidth={state.containerWidth}
                   contactId={props.contactId}
-                  listId={props.listId}
                   />
                 </div>
               </TabPane>
-              <TabPane placeholder={<Placeholder/>} tab='Instagram Only' key='instagram'>
+              <TabPane placeholder={<Placeholder />} tab='Instagram Only' key='instagram'>
                 <div style={styles.feedInnerContainer}>
                   <InstagramFeed
                   refName='instagram'
                   containerHeight={700}
                   containerWidth={state.containerWidth}
                   contactId={props.contactId}
-                  listId={props.listId}
                   />
                 </div>
               </TabPane>
@@ -316,7 +315,6 @@ class ContactProfile extends Component {
                   refName='emails'
                   containerWidth={state.containerWidth}
                   contactId={props.contactId}
-                  listId={props.listId}
                   />
                 </div>
               </TabPane>
@@ -330,7 +328,6 @@ class ContactProfile extends Component {
 
 
 function mapStateToProps(state, props) {
-  const listId = parseInt(props.params.listId, 10);
   const contactId = parseInt(props.params.contactId, 10);
   const contact = state.contactReducer[contactId];
   const employers = contact && contact.employers !== null && contact.employers
@@ -339,18 +336,17 @@ function mapStateToProps(state, props) {
   const pastemployers = contact && contact.pastemployers !== null && contact.pastemployers
   .filter(pubId => state.publicationReducer[pubId])
   .map(pubId => state.publicationReducer[pubId]);
+
   return {
-    listId,
     contactId,
     contact,
     employers,
     pastemployers,
-    list: state.listReducer[listId],
     firstTimeUser: state.personReducer.firstTimeUser,
     showUploadGuide: state.joyrideReducer.showUploadGuide,
     showGeneralGuide: state.joyrideReducer.showGeneralGuide,
-    listDidInvalidate: state.listReducer.didInvalidate,
     contactDidInvalidate: state.contactReducer.didInvalidate,
+    listsBelong: state.listsContactBelongsToReducer[contactId] ? state.listsContactBelongsToReducer[contactId].map(id => state.listReducer[id]) : []
   };
 }
 
@@ -391,11 +387,10 @@ function mapDispatchToProps(dispatch, props) {
     patchContact: (contactId, body) => dispatch(contactActions.patchContact(contactId, body)),
     fetchContactFeeds: (contactId) => dispatch(feedActions.fetchContactFeeds(contactId)),
     fetchPublication: pubId => dispatch(publicationActions.fetchPublication(pubId)),
-    fetchList: listId => dispatch(listActions.fetchList(listId)),
     removeFirstTimeUser: _ => dispatch(loginActions.removeFirstTimeUser()),
     turnOnGeneralGuide: _ => dispatch(joyrideActions.turnOnGeneralGuide()),
     fetchListsContactBelongsTo: contactid => dispatch(contactActions.fetchListsContactBelongsTo(contactid)),
   };
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )(withRouter(ContactProfile));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactProfile));

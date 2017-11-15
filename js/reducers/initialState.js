@@ -210,5 +210,7 @@ export const initialState = {
   contactTagReducer: {
     isReceiving: false,
     didInvalidate: false,
+  },
+  listsContactBelongsToReducer: {
   }
 };

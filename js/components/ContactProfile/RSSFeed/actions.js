@@ -29,7 +29,6 @@ export function fetchContactFeeds(contactId) {
     return api.get(`/contacts/${contactId}/feeds`)
     .then(response => {
       const res = normalize(response, {data: arrayOf(feedSchema)});
-      console.log(response);
       return dispatch({
         type: feedConstant.RECEIVE_MULTIPLE,
         feeds: res.entities.feeds,

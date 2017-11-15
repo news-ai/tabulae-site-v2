@@ -376,6 +376,7 @@ class EmailPanel extends Component {
     .then(
       _ => this.setState({isPreveiwOpen: true}),
       err => {
+        console.log(err);
         alertify.alert(err.toString());
       });
   }

@@ -58,7 +58,7 @@ const WrappedInstagram = props => {
 
 const contactDescriptorClassname = 'large-12 medium-8 small-12 columns';
 
-const ContactProfileDescriptions = ({contact, patchContact, className}) => {
+const ContactProfileDescriptions = ({contact, patchContact, className, listsBelong}) => {
   let instagramErrorText = null;
   if (contact.instagraminvalid) instagramErrorText = 'Invalid Instagram handle';
   else if (contact.instagramprivate) instagramErrorText = 'Instagram is private';
@@ -148,7 +148,7 @@ const ContactProfileDescriptions = ({contact, patchContact, className}) => {
       contentTitle='Website'
       onBlur={(value) => isURL(value) && patchContact(contact.id, {website: value})}
       />
-      <ContactCustomDescriptions contact={contact} patchContact={patchContact} />
+      <ContactCustomDescriptions contact={contact} patchContact={patchContact} listsBelong={listsBelong} />
     </div>);
 };
 

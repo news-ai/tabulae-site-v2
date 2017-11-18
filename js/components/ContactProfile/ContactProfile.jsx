@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import withRouter from 'react-router/lib/withRouter';
+import Link from 'react-router/lib/Link';
 import {actions as listActions} from 'components/Lists';
 import {actions as publicationActions} from 'components/Publications';
 import {actions as loginActions} from 'components/Login';
@@ -9,13 +10,17 @@ import {actions as contactActions} from 'components/Contacts';
 import {actions as feedActions} from 'components/ContactProfile/RSSFeed';
 import {actions as headlineActions} from 'components/ContactProfile/Headlines';
 import * as joyrideActions from 'components/Joyride/actions';
-import {teal400, teal900, grey700, grey500} from 'material-ui/styles/colors';
+import {
+  teal400, teal900,
+  grey50, grey700, grey500,
+} from 'material-ui/styles/colors';
 
 import hopscotch from 'hopscotch';
 import 'node_modules/hopscotch/dist/css/hopscotch.min.css';
 import tour from './tour';
 
 import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 // import Textarea from 'react-textarea-autosize';
 import TextareaAutosize from 'react-autosize-textarea';
@@ -258,8 +263,36 @@ class ContactProfile extends Component {
                 </div>
               </div>
             </div>
-            )
-            }
+            )}
+          <div className='large-12 columns' style={{
+            margin: '20px 0',
+            background: grey50,
+            padding: 10
+          }} >
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} >
+              <span>Lists this Contact Belongs On</span>
+              <FontIcon
+              className='fa fa-plus'
+              color={grey500}
+              hoverColor={grey700}
+              style={{fontSize: '0.9em'}}
+              />
+            </div>
+            <div>
+            {props.listsBelong.map(list =>
+              <div
+              key={list.id}
+              style={{
+                fontSize: '0.9em',
+                color: grey700,
+                cursor: 'pointer',
+              }}
+              >
+                <Link to={{pathname: `/tables/${list.id}`}} >{list.name}</Link>
+              </div>              
+              )}
+            </div>
+          </div>
           <div className='large-12 columns' style={styles.feedContainer}>
             <FeedsController {...props}/>
             <Tabs

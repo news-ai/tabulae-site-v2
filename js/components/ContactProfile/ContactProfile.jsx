@@ -12,7 +12,7 @@ import {actions as headlineActions} from 'components/ContactProfile/Headlines';
 import * as joyrideActions from 'components/Joyride/actions';
 import {
   teal400, teal900,
-  grey50, grey700, grey500,
+  grey50, grey500, grey700, grey800
 } from 'material-ui/styles/colors';
 
 import hopscotch from 'hopscotch';
@@ -37,6 +37,7 @@ import FeedsController from './FeedsController.jsx';
 import ContactProfileDescriptions from './ContactProfileDescriptions.jsx';
 import AddTagHOC from './AddTagHOC.jsx';
 import Tags from 'components/Tags/Tags.jsx';
+import ListsContactBelongsToPanel from 'components/Contacts/ListsContactBelongsTo/ListsContactBelongsToPanel';
 
 import Tabs, {TabPane} from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
@@ -54,7 +55,8 @@ class ContactProfile extends Component {
     this.state = {
       tabContainerWidth: 800,
       firsttime: this.props.firstTimeUser,
-      activeKey: 'all'
+      activeKey: 'all',
+      listsContactPanelOpen: false
     };
     window.onresize = _ => {
       const node = ReactDOM.findDOMNode(this.refs.tabs);
@@ -159,142 +161,174 @@ class ContactProfile extends Component {
           </Dialog>
         }
         <div className='large-9 medium-12 small-12 columns'>
-          {
-          props.contact && (
-            <div className='row' style={styles.contact.container}>
-              <ContactProfileDescriptions
-              className='large-6 medium-12 small-12 columns'
-              contact={props.contact}
-              {...props}
-              />
-              <div className='large-6 medium-12 small-12 columns'>
-                <div className='row'>
-                  <div className='large-12 medium-12 small-12 columns'>
-                    <span style={styles.header}>Notes</span>
-                  </div>
-                  <div className='large-12 medium-12 small-12 columns'>
-                    <TextareaAutosize value={state.notes} maxRows={7} onChange={this.onTextAreaChange} onBlur={this.onTextAreaBlur} />
-                    <span style={styles.saveIndicator}>{props.contact.notes !== state.notes ? 'Unsaved' : 'Saved'}</span>
-                  </div>
+        {props.contact && (
+          <div className='row' style={styles.contact.container}>
+            <ContactProfileDescriptions
+            className='large-6 medium-12 small-12 columns'
+            contact={props.contact}
+            {...props}
+            />
+            <div className='large-6 medium-12 small-12 columns'>
+              <div className='row'>
+                <div className='large-12 medium-12 small-12 columns'>
+                  <span style={styles.header}>Notes</span>
                 </div>
                 <div className='large-12 medium-12 small-12 columns'>
-                  <div className='vertical-center' style={styles.employerContainer}>
-                    <span style={styles.header}>Current Publications/Employers</span>
-                    <AddEmployerHOC title='Add Current Publication/Employer' type='employers' contact={props.contact}>
+                  <TextareaAutosize value={state.notes} maxRows={7} onChange={this.onTextAreaChange} onBlur={this.onTextAreaBlur} />
+                  <span style={styles.saveIndicator}>{props.contact.notes !== state.notes ? 'Unsaved' : 'Saved'}</span>
+                </div>
+              </div>
+              <div className='large-12 medium-12 small-12 columns'>
+                <div className='vertical-center' style={styles.employerContainer}>
+                  <span style={styles.header}>Current Publications/Employers</span>
+                  <AddEmployerHOC title='Add Current Publication/Employer' type='employers' contact={props.contact}>
+                  {({onRequestOpen}) => (
+                    <IconButton
+                    disabled={props.contact.readonly}
+                    iconStyle={styles.smallIcon}
+                    style={styles.small}
+                    iconClassName='fa fa-plus'
+                    tooltip='Add Publication'
+                    tooltipPosition='top-right'
+                    onClick={onRequestOpen}
+                    />)}
+                  </AddEmployerHOC>
+                </div>
+                <div>
+              {props.employers &&
+                props.employers.map((employer, i) =>
+                  <ContactEmployerDescriptor
+                  style={styles.contactemployer}
+                  key={i}
+                  employer={employer}
+                  which='employers'
+                  contact={props.contact}
+                  />)}
+                {(props.employers.length === 0 || !props.employers) &&
+                  <None/>}
+                </div>
+                <div style={styles.employerContainer}>
+                  <div className='vertical-center'>
+                    <span style={styles.header}>Past Publications/Employers</span>
+                    <AddEmployerHOC title='Add Past Publication/Employer' type='pastemployers' contact={props.contact}>
                     {({onRequestOpen}) => (
                       <IconButton
                       disabled={props.contact.readonly}
+                      style={styles.iconBtn}
                       iconStyle={styles.smallIcon}
                       style={styles.small}
                       iconClassName='fa fa-plus'
-                      tooltip='Add Publication'
+                      tooltip='Add Publication/Employer'
                       tooltipPosition='top-right'
                       onClick={onRequestOpen}
                       />)}
                     </AddEmployerHOC>
                   </div>
-                  <div>
-                {props.employers &&
-                  props.employers.map((employer, i) =>
-                    <ContactEmployerDescriptor
-                    style={styles.contactemployer}
-                    key={i}
-                    employer={employer}
-                    which='employers'
-                    contact={props.contact}
-                    />)}
-                  {(props.employers.length === 0 || !props.employers) &&
-                    <None/>}
-                  </div>
-                  <div style={styles.employerContainer}>
-                    <div className='vertical-center'>
-                      <span style={styles.header}>Past Publications/Employers</span>
-                      <AddEmployerHOC title='Add Past Publication/Employer' type='pastemployers' contact={props.contact}>
-                      {({onRequestOpen}) => (
-                        <IconButton
-                        disabled={props.contact.readonly}
-                        style={styles.iconBtn}
-                        iconStyle={styles.smallIcon}
-                        style={styles.small}
-                        iconClassName='fa fa-plus'
-                        tooltip='Add Publication/Employer'
-                        tooltipPosition='top-right'
-                        onClick={onRequestOpen}
-                        />)}
-                      </AddEmployerHOC>
-                    </div>
-                  </div>
-                  <div>
-                {props.pastemployers &&
-                  props.pastemployers.map((employer, i) =>
-                    <ContactEmployerDescriptor style={styles.contactemployer} key={i} employer={employer} which='pastemployers' contact={props.contact} />)}
-                  {(props.pastemployers.length === 0 || !props.pastemployers) &&
-                    <None/>}
-                  </div>
-                  <div className='vertical-center' style={styles.employerContainer}>
-                    <span style={styles.header}>Tags</span>
-                    <AddTagHOC contactId={props.contact.id} tags={props.contact.tags}>
-                    {({onRequestOpen}) =>
-                      <IconButton
-                      disabled={props.contact.readonly}
-                      iconStyle={styles.smallIcon}
-                      style={styles.small}
-                      iconClassName='fa fa-plus'
-                      tooltip='Add Tag'
-                      tooltipPosition='top-right'
-                      onClick={onRequestOpen}
-                      />}
-                    </AddTagHOC>
-                  </div>
-                  <div>
-                    <Tags
-                    whiteLabel
-                    className='columns'
-                    color={teal400}
-                    borderColor={teal900}
-                    onDeleteTag={this.onDeleteTag}
-                    tags={props.contact.tags}
-                    createLink={name => `/contacts?tag=${name}`}
-                    textStyle={{fontSize: '1em'}}
-                    />
-                  {props.contact.tags.length === 0 &&
-                    <None />}
-                  </div>
+                </div>
+                <div>
+              {props.pastemployers &&
+                props.pastemployers.map((employer, i) =>
+                  <ContactEmployerDescriptor style={styles.contactemployer} key={i} employer={employer} which='pastemployers' contact={props.contact} />)}
+                {(props.pastemployers.length === 0 || !props.pastemployers) &&
+                  <None/>}
+                </div>
+                <div className='vertical-center' style={styles.employerContainer}>
+                  <span style={styles.header}>Tags</span>
+                  <AddTagHOC contactId={props.contact.id} tags={props.contact.tags}>
+                  {({onRequestOpen}) =>
+                    <IconButton
+                    disabled={props.contact.readonly}
+                    iconStyle={styles.smallIcon}
+                    style={styles.small}
+                    iconClassName='fa fa-plus'
+                    tooltip='Add Tag'
+                    tooltipPosition='top-right'
+                    onClick={onRequestOpen}
+                    />}
+                  </AddTagHOC>
+                </div>
+                <div>
+                  <Tags
+                  whiteLabel
+                  className='columns'
+                  color={teal400}
+                  borderColor={teal900}
+                  onDeleteTag={this.onDeleteTag}
+                  tags={props.contact.tags}
+                  createLink={name => `/contacts?tag=${name}`}
+                  textStyle={{fontSize: '1em'}}
+                  />
+                {props.contact.tags.length === 0 &&
+                  <None />}
                 </div>
               </div>
             </div>
-            )}
+          </div>)}
+          <Dialog
+          autoScrollBodyContent
+          title='Lists with this Contact'
+          open={state.listsContactPanelOpen}
+          onRequestClose={e => this.setState({listsContactPanelOpen: false})}
+          >
+            <ListsContactBelongsToPanel
+            contactid={props.contactId}
+            /> 
+          </Dialog>
           <div className='large-12 columns' style={{
             margin: '20px 0',
             background: grey50,
-            padding: 10
+            padding: '10px 15px'
           }} >
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} >
-              <span>Lists this Contact Belongs On</span>
-              <FontIcon
-              className='fa fa-plus'
-              color={grey500}
-              hoverColor={grey700}
-              style={{fontSize: '0.9em'}}
-              />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }} >
+              <span>Lists with this Contact </span>
+              <div style={{
+                border: `1px solid ${grey800}`,
+                borderRadius: '1.2em',
+                padding: '0 10px',
+              }}
+              onClick={e => this.setState({listsContactPanelOpen: true})}
+              >
+                <span style={{
+                  fontSize: '0.8em',
+                  margin: '0 5px',
+                  color: grey800,
+                  cursor: 'pointer',
+                }} >Add Contact to List</span>
+                <FontIcon
+                className='fa fa-plus'
+                color={grey500}
+                hoverColor={grey700}
+                style={{fontSize: '0.8em'}}
+                />
+              </div>
             </div>
             <div>
             {props.listsBelong.map(list =>
-              <div
-              key={list.id}
-              style={{
-                fontSize: '0.9em',
-                color: grey700,
-                cursor: 'pointer',
-              }}
-              >
-                <Link to={{pathname: `/tables/${list.id}`}} >{list.name}</Link>
-              </div>              
+              <div className='vertical-center'>
+                <Link
+                key={list.id}
+                to={{pathname: `/tables/${list.id}`}}
+                style={{
+                  cursor: 'pointer',
+                  fontSize: '0.9em',
+                  color: grey700,
+                  marginRight: '15px'
+                }}
+                >{list.name}</Link>
+                <FontIcon
+                className='fa fa-ellipsis-h'
+                style={{fontSize: '0.8em', color: grey500}}
+                />
+              </div>
               )}
             </div>
           </div>
           <div className='large-12 columns' style={styles.feedContainer}>
-            <FeedsController {...props}/>
+            <FeedsController {...props} />
             <Tabs
             ref='tabs'
             defaultActiveKey='/emailstats'

@@ -37,7 +37,7 @@ import listsContactBelongsToReducer from 'components/Contacts/ListsContactBelong
 import {searchPublicationsEpic} from 'components/Publications/epics';
 import {fetchPerson, setupThirdparty} from 'components/Login/epics';
 import {fetchEmail} from 'components/Email/epics';
-import {addContactToList} from 'components/Contacts/epics';
+import {addContactToList, removeContactFromList} from 'components/Contacts/epics';
 // import {connectToSocket, socketAuth, emitReadReceipt} from 'components/Notifications/epics';
 
 const rootReducer = combineReducers({
@@ -81,6 +81,7 @@ export const rootEpic = combineEpics(
   setupThirdparty,
   fetchEmail,
   addContactToList,
+  removeContactFromList,
   // connectToSocket,
   // socketAuth,
   // emitReadReceipt

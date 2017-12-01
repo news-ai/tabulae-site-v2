@@ -9,13 +9,33 @@ import 'rxjs/add/operator/takeUntil';
 import {normalize, Schema, arrayOf} from 'normalizr';
 const listSchema = new Schema('lists');
 
-export const addContactToList = (action$, {getState}) =>
+export const addContactToList = (action$) =>
   action$.ofType('ADD_CONTACT_TO_LIST')
   .filter(action => action.contactid && action.listid)
   .switchMap(action => 
     api.post(
       `/contacts/${action.contactid}/add-to-list`,
-      getState().listReducer[action.listid]
+      {listids: [action.listid]}
+      )
+    .then(response => ({
+      type: 'RECEIVE_LIST',
+      list: response.data
+    }))
+    )
+  .catch(err => {
+    console.log(err);
+    return ({ //TODO: handle error
+      type: 'ERROR_STUFF'
+    })
+  });
+
+export const removeContactFromList = (action$) =>
+  action$.ofType('REMOVE_CONTACT_FROM_LIST')
+  .filter(action => action.contactid && action.listid)
+  .switchMap(action => 
+    api.post(
+      `/contacts/${action.contactid}/remove-from-list`,
+      {listids: [action.listid]}
       )
     .then(response => ({
       type: 'RECEIVE_LIST',

@@ -307,7 +307,11 @@ class ContactProfile extends Component {
             </div>
             <div>
             {props.listsBelong.map(list =>
-              <ListsContactBelongsToItem list={list} />
+              <ListsContactBelongsToItem
+              key={`${list.id}-listsbelong-item`}
+              list={list}
+              contactid={props.contactId}
+              />
               )}
             </div>
           </div>

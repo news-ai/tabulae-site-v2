@@ -17,7 +17,9 @@ class ListsContactBelongsToPanel extends Component {
   render() {
     return (
       <div>
-        <div>Add Contact to lists</div>
+        <div>
+          <strong>Add Contact to Lists</strong>
+        </div>
       {this.props.isReceiving &&
         <div>IS RECEIVING</div>}
         <div>
@@ -26,14 +28,13 @@ class ListsContactBelongsToPanel extends Component {
           return (
               <div style={{color: added ? grey500 : grey800}}>
                 <span>{list.name}</span>
-              {!added &&
                 <FontIcon
-                className='fa fa-plus'
+                className={`fa fa-${added ? 'trash' : 'plus'}`}
                 style={{fontSize: '0.9em', margin: '3px 5px', cursor: 'pointer'}}
                 color={grey500}
                 hoverColor={green500}
-                onClick={_ => this.props.addToList(list.id)}
-                />}
+                onClick={_ => added ? this.props.removeFromList(list.id) : this.props.addToList(list.id)}
+                />
               </div>
             )}
           )}
@@ -54,5 +55,6 @@ export default connect(
     fetchLists: () => dispatch(listActions.fetchLists()),
     searchList: () => dispatch({type: 'FETCH_SEARCH_LIST'}),
     addToList: listid => dispatch({type: 'ADD_CONTACT_TO_LIST', contactid: props.contactid, listid}),
+    removeFromList: listid => dispatch({type: 'REMOVE_CONTACT_FROM_LIST', contactid: props.contactid, listid}),
   })
   )(ListsContactBelongsToPanel);

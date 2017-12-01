@@ -38,6 +38,7 @@ import ContactProfileDescriptions from './ContactProfileDescriptions.jsx';
 import AddTagHOC from './AddTagHOC.jsx';
 import Tags from 'components/Tags/Tags.jsx';
 import ListsContactBelongsToPanel from 'components/Contacts/ListsContactBelongsTo/ListsContactBelongsToPanel';
+import ListsContactBelongsToItem from 'components/Contacts/ListsContactBelongsTo/ListsContactBelongsToItem';
 
 import Tabs, {TabPane} from 'rc-tabs';
 import TabContent from 'rc-tabs/lib/TabContent';
@@ -141,8 +142,6 @@ class ContactProfile extends Component {
   render() {
     const state = this.state;
     const props = this.props;
-    console.log(props.contact);
-    console.log(props.listsBelong);
 
     return (
       <div className='row align-center'>
@@ -205,7 +204,7 @@ class ContactProfile extends Component {
                   contact={props.contact}
                   />)}
                 {(props.employers.length === 0 || !props.employers) &&
-                  <None/>}
+                  <None />}
                 </div>
                 <div style={styles.employerContainer}>
                   <div className='vertical-center'>
@@ -230,7 +229,7 @@ class ContactProfile extends Component {
                 props.pastemployers.map((employer, i) =>
                   <ContactEmployerDescriptor style={styles.contactemployer} key={i} employer={employer} which='pastemployers' contact={props.contact} />)}
                 {(props.pastemployers.length === 0 || !props.pastemployers) &&
-                  <None/>}
+                  <None />}
                 </div>
                 <div className='vertical-center' style={styles.employerContainer}>
                   <span style={styles.header}>Tags</span>
@@ -308,22 +307,7 @@ class ContactProfile extends Component {
             </div>
             <div>
             {props.listsBelong.map(list =>
-              <div className='vertical-center'>
-                <Link
-                key={list.id}
-                to={{pathname: `/tables/${list.id}`}}
-                style={{
-                  cursor: 'pointer',
-                  fontSize: '0.9em',
-                  color: grey700,
-                  marginRight: '15px'
-                }}
-                >{list.name}</Link>
-                <FontIcon
-                className='fa fa-ellipsis-h'
-                style={{fontSize: '0.8em', color: grey500}}
-                />
-              </div>
+              <ListsContactBelongsToItem list={list} />
               )}
             </div>
           </div>

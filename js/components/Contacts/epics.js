@@ -9,23 +9,25 @@ import 'rxjs/add/operator/takeUntil';
 import {normalize, Schema, arrayOf} from 'normalizr';
 const listSchema = new Schema('lists');
 
-export const addContactToList = (action$, getState) =>
+export const addContactToList = (action$, {getState}) =>
   action$.ofType('ADD_CONTACT_TO_LIST')
   .filter(action => action.contactid && action.listid)
   .switchMap(action => 
     api.post(
-      `/contact/${action.contactid}/add-to-list`,
+      `/contacts/${action.contactid}/add-to-list`,
       getState().listReducer[action.listid]
       )
-    .then(response => normalize(response.data, listSchema))
+    .then(response => ({
+      type: 'RECEIVE_LIST',
+      list: response.data
+    }))
     )
-  .flatMap(res => ({
-    type: 'RECEIVE_LIST',
-    list: res.result.data
-  }))
-  .catch(err => ({ //TODO: handle error
-    type: 'ERROR_STUFF'
-  }));
+  .catch(err => {
+    console.log(err);
+    return ({ //TODO: handle error
+      type: 'ERROR_STUFF'
+    })
+  });
 
 // export const searchPublicationsEpic = action$ =>
 //   action$.ofType('SEARCH_PUBLICATION_REQUEST')

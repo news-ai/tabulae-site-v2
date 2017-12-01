@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as listActions from 'components/Lists/actions';
-import {grey500, grey800} from 'material-ui/styles/colors';
+import {green500, grey500, grey800} from 'material-ui/styles/colors';
+import FontIcon from 'material-ui/FontIcon';
 
 class ListsContactBelongsToPanel extends Component {
   constructor(props) {
@@ -20,10 +21,21 @@ class ListsContactBelongsToPanel extends Component {
       {this.props.isReceiving &&
         <div>IS RECEIVING</div>}
         <div>
-        {this.props.lists.map(list =>
-          <div
-          style={{color: this.props.listsBelong.some(l => l.id === list.id) ? grey500 : grey800}}
-          >{list.name}</div>
+        {this.props.lists.map(list => {
+          const added = this.props.listsBelong.some(l => l.id === list.id);
+          return (
+              <div style={{color: added ? grey500 : grey800}}>
+                <span>{list.name}</span>
+              {!added &&
+                <FontIcon
+                className='fa fa-plus'
+                style={{fontSize: '0.9em', margin: '3px 5px', cursor: 'pointer'}}
+                color={grey500}
+                hoverColor={green500}
+                onClick={_ => this.props.addToList(list.id)}
+                />}
+              </div>
+            )}
           )}
         </div>
       </div>
@@ -41,6 +53,6 @@ export default connect(
   (dispatch, props) => ({
     fetchLists: () => dispatch(listActions.fetchLists()),
     searchList: () => dispatch({type: 'FETCH_SEARCH_LIST'}),
-    addToList: ({contactid, listid}) => dispatch({type: 'ADD_CONTACT_TO_LIST', contactid, listid}),
+    addToList: listid => dispatch({type: 'ADD_CONTACT_TO_LIST', contactid: props.contactid, listid}),
   })
   )(ListsContactBelongsToPanel);
